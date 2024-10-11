@@ -4,21 +4,21 @@
 
 
 #------------------------------------------------------------
-# Table: ROLES
+# Table: GJ_ROLES
 #------------------------------------------------------------
 
-CREATE TABLE ROLES(
+CREATE TABLE GJ_ROLES(
         code  Char (1) NOT NULL ,
         label Varchar (30) NOT NULL
-	,CONSTRAINT ROLES_PK PRIMARY KEY (code)
+	,CONSTRAINT GJ_ROLES_PK PRIMARY KEY (code)
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: USERS
+# Table: GJ_USERS
 #------------------------------------------------------------
 
-CREATE TABLE USERS(
+CREATE TABLE GJ_USERS(
         id               Int  Auto_increment  NOT NULL ,
         pseudo           Varchar (20) NOT NULL ,
         password         Varchar (250) NOT NULL ,
@@ -29,30 +29,30 @@ CREATE TABLE USERS(
         created_at       TimeStamp NOT NULL ,
         can_contribute   Bool NOT NULL ,
         code             Char (1) NOT NULL
-	,CONSTRAINT USERS_PK PRIMARY KEY (id)
+	,CONSTRAINT GJ_USERS_PK PRIMARY KEY (id)
 
-	,CONSTRAINT USERS_ROLES_FK FOREIGN KEY (code) REFERENCES ROLES(code)
+	,CONSTRAINT GJ_USERS_GJ_ROLES_FK FOREIGN KEY (code) REFERENCES GJ_ROLES(code)
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: SUPPORTS
+# Table: GJ_SUPPORTS
 #------------------------------------------------------------
 
-CREATE TABLE SUPPORTS(
+CREATE TABLE GJ_SUPPORTS(
         id   Int  Auto_increment  NOT NULL ,
         nom  Varchar (70) NOT NULL ,
         desc Varchar (50) ,
         date TimeStamp NOT NULL
-	,CONSTRAINT SUPPORTS_PK PRIMARY KEY (id)
+	,CONSTRAINT GJ_SUPPORTS_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: JEUX
+# Table: GJ_JEUX
 #------------------------------------------------------------
 
-CREATE TABLE JEUX(
+CREATE TABLE GJ_JEUX(
         id                 Int  Auto_increment  NOT NULL ,
         titre              Varchar (70) NOT NULL ,
         desc               Varchar (300) NOT NULL ,
@@ -60,83 +60,83 @@ CREATE TABLE JEUX(
         fichier_couverture Varchar (300) NOT NULL ,
         possede_par        Int NOT NULL ,
         moyenne            Int NOT NULL ,
-        id_SUPPORTS        Int NOT NULL
-	,CONSTRAINT JEUX_PK PRIMARY KEY (id)
+        id_GJ_SUPPORTS     Int NOT NULL
+	,CONSTRAINT GJ_JEUX_PK PRIMARY KEY (id)
 
-	,CONSTRAINT JEUX_SUPPORTS_FK FOREIGN KEY (id_SUPPORTS) REFERENCES SUPPORTS(id)
+	,CONSTRAINT GJ_JEUX_GJ_SUPPORTS_FK FOREIGN KEY (id_GJ_SUPPORTS) REFERENCES GJ_SUPPORTS(id)
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: GENRES
+# Table: GJ_GENRES
 #------------------------------------------------------------
 
-CREATE TABLE GENRES(
+CREATE TABLE GJ_GENRES(
         id    Int  Auto_increment  NOT NULL ,
         label Varchar (300) NOT NULL
-	,CONSTRAINT GENRES_PK PRIMARY KEY (id)
+	,CONSTRAINT GJ_GENRES_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: STATUT
+# Table: GJ_STATUT
 #------------------------------------------------------------
 
-CREATE TABLE STATUT(
+CREATE TABLE GJ_STATUT(
         id    Int  Auto_increment  NOT NULL ,
         label Varchar (30) NOT NULL
-	,CONSTRAINT STATUT_PK PRIMARY KEY (id)
+	,CONSTRAINT GJ_STATUT_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: REQUETES
+# Table: GJ_REQUETES
 #------------------------------------------------------------
 
-CREATE TABLE REQUETES(
+CREATE TABLE GJ_REQUETES(
         id                 Int  Auto_increment  NOT NULL ,
         motif              Varchar (300) ,
         titre              Varchar (70) NOT NULL ,
         desc               Varchar (500) NOT NULL ,
         date_sortie        TimeStamp NOT NULL ,
         fichier_couverture Varchar (300) NOT NULL ,
-        id_USERS           Int NOT NULL ,
-        id_STATUT          Int NOT NULL ,
-        id_USERS_VALIDE    Int
-	,CONSTRAINT REQUETES_PK PRIMARY KEY (id)
+        id_GJ_USERS        Int NOT NULL ,
+        id_GJ_STATUT       Int NOT NULL ,
+        id_GJ_USERS_VALIDE Int
+	,CONSTRAINT GJ_REQUETES_PK PRIMARY KEY (id)
 
-	,CONSTRAINT REQUETES_USERS_FK FOREIGN KEY (id_USERS) REFERENCES USERS(id)
-	,CONSTRAINT REQUETES_STATUT0_FK FOREIGN KEY (id_STATUT) REFERENCES STATUT(id)
-	,CONSTRAINT REQUETES_USERS1_FK FOREIGN KEY (id_USERS_VALIDE) REFERENCES USERS(id)
+	,CONSTRAINT GJ_REQUETES_GJ_USERS_FK FOREIGN KEY (id_GJ_USERS) REFERENCES GJ_USERS(id)
+	,CONSTRAINT GJ_REQUETES_GJ_STATUT0_FK FOREIGN KEY (id_GJ_STATUT) REFERENCES GJ_STATUT(id)
+	,CONSTRAINT GJ_REQUETES_GJ_USERS1_FK FOREIGN KEY (id_GJ_USERS_VALIDE) REFERENCES GJ_USERS(id)
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: PROGRESSION
+# Table: GJ_PROGRESSION
 #------------------------------------------------------------
 
-CREATE TABLE PROGRESSION(
+CREATE TABLE GJ_PROGRESSION(
         id      Int  Auto_increment  NOT NULL ,
         libelle Varchar (30) NOT NULL
-	,CONSTRAINT PROGRESSION_PK PRIMARY KEY (id)
+	,CONSTRAINT GJ_PROGRESSION_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: COLLECTION
+# Table: GJ_COLLECTION
 #------------------------------------------------------------
 
-CREATE TABLE COLLECTION(
-        id_USERS Int NOT NULL ,
-        id_JEUX  Int NOT NULL ,
-        note     Float NOT NULL ,
-        comment  Varchar (300) NOT NULL ,
-        id       Int NOT NULL
-	,CONSTRAINT COLLECTION_PK PRIMARY KEY (id_USERS,id_JEUX)
+CREATE TABLE GJ_COLLECTION(
+        id_GJ_JEUX  Int NOT NULL ,
+        id_GJ_USERS Int NOT NULL ,
+        note        Float NOT NULL ,
+        comment     Varchar (300) NOT NULL ,
+        id          Int NOT NULL
+	,CONSTRAINT GJ_COLLECTION_PK PRIMARY KEY (id_GJ_JEUX,id_GJ_USERS)
 
-	,CONSTRAINT COLLECTION_USERS_FK FOREIGN KEY (id_USERS) REFERENCES USERS(id)
-	,CONSTRAINT COLLECTION_JEUX0_FK FOREIGN KEY (id_JEUX) REFERENCES JEUX(id)
-	,CONSTRAINT COLLECTION_PROGRESSION1_FK FOREIGN KEY (id) REFERENCES PROGRESSION(id)
+	,CONSTRAINT GJ_COLLECTION_GJ_JEUX_FK FOREIGN KEY (id_GJ_JEUX) REFERENCES GJ_JEUX(id)
+	,CONSTRAINT GJ_COLLECTION_GJ_USERS0_FK FOREIGN KEY (id_GJ_USERS) REFERENCES GJ_USERS(id)
+	,CONSTRAINT GJ_COLLECTION_GJ_PROGRESSION1_FK FOREIGN KEY (id) REFERENCES GJ_PROGRESSION(id)
 )ENGINE=InnoDB;
 
 
@@ -145,12 +145,12 @@ CREATE TABLE COLLECTION(
 #------------------------------------------------------------
 
 CREATE TABLE POSSEDE_SUPPORTS(
-        id       Int NOT NULL ,
-        id_USERS Int NOT NULL
-	,CONSTRAINT POSSEDE_SUPPORTS_PK PRIMARY KEY (id,id_USERS)
+        id          Int NOT NULL ,
+        id_GJ_USERS Int NOT NULL
+	,CONSTRAINT POSSEDE_SUPPORTS_PK PRIMARY KEY (id,id_GJ_USERS)
 
-	,CONSTRAINT POSSEDE_SUPPORTS_SUPPORTS_FK FOREIGN KEY (id) REFERENCES SUPPORTS(id)
-	,CONSTRAINT POSSEDE_SUPPORTS_USERS0_FK FOREIGN KEY (id_USERS) REFERENCES USERS(id)
+	,CONSTRAINT POSSEDE_SUPPORTS_GJ_SUPPORTS_FK FOREIGN KEY (id) REFERENCES GJ_SUPPORTS(id)
+	,CONSTRAINT POSSEDE_SUPPORTS_GJ_USERS0_FK FOREIGN KEY (id_GJ_USERS) REFERENCES GJ_USERS(id)
 )ENGINE=InnoDB;
 
 
@@ -159,11 +159,11 @@ CREATE TABLE POSSEDE_SUPPORTS(
 #------------------------------------------------------------
 
 CREATE TABLE APPARTIENT(
-        id        Int NOT NULL ,
-        id_GENRES Int NOT NULL
-	,CONSTRAINT APPARTIENT_PK PRIMARY KEY (id,id_GENRES)
+        id           Int NOT NULL ,
+        id_GJ_GENRES Int NOT NULL
+	,CONSTRAINT APPARTIENT_PK PRIMARY KEY (id,id_GJ_GENRES)
 
-	,CONSTRAINT APPARTIENT_JEUX_FK FOREIGN KEY (id) REFERENCES JEUX(id)
-	,CONSTRAINT APPARTIENT_GENRES0_FK FOREIGN KEY (id_GENRES) REFERENCES GENRES(id)
+	,CONSTRAINT APPARTIENT_GJ_JEUX_FK FOREIGN KEY (id) REFERENCES GJ_JEUX(id)
+	,CONSTRAINT APPARTIENT_GJ_GENRES0_FK FOREIGN KEY (id_GJ_GENRES) REFERENCES GJ_GENRES(id)
 )ENGINE=InnoDB;
 
