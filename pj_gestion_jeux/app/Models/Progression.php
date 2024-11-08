@@ -10,26 +10,26 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Genre
+ * Class Progression
  * 
  * @property int $id
- * @property string $label
+ * @property string $libelle
  * 
- * @property Collection|AppartientGenre[] $appartient_genres
+ * @property Collection|CollectionJeux[] $collection_jeuxes
  *
  * @package App\Models
  */
-class Genre extends Model
+class Progression extends Model
 {
-	protected $table = 'GJ_genres';
+	protected $table = 'GJ_progression';
 	public $timestamps = false;
 
 	protected $fillable = [
-		'label'
+		'libelle'
 	];
 
-	public function appartient_genres()
+	public function collection_jeuxes()
 	{
-		return $this->hasMany(AppartientGenre::class, 'id_GJ_GENRES');
+		return $this->hasMany(CollectionJeux::class, 'id');
 	}
 }

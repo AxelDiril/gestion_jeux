@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Statut extends Model
 {
-	protected $table = 'GJ_statut';
+	protected $table = 'GJ_statuts';
 	public $timestamps = false;
 
 	protected $fillable = [

@@ -9,7 +9,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Collection
+ * Class CollectionJeux
  * 
  * @property int $id_GJ_JEUX
  * @property int $id_GJ_USERS
@@ -23,9 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Collection extends Model
+class CollectionJeux extends Model
 {
-	protected $table = 'GJ_collection';
+	protected $table = 'GJ_collection_jeux';
 	public $incrementing = false;
 	public $timestamps = false;
 

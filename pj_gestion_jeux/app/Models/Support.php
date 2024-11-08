@@ -18,8 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $description
  * @property Carbon $date_sortie
  * 
+ * @property Collection|CollectionSupport[] $collection_supports
  * @property Collection|Jeux[] $jeuxes
- * @property Collection|POSSEDESUPPORT[] $p_o_s_s_e_d_e_s_u_p_p_o_r_t_s
  *
  * @package App\Models
  */
@@ -38,13 +38,13 @@ class Support extends Model
 		'date_sortie'
 	];
 
+	public function collection_supports()
+	{
+		return $this->hasMany(CollectionSupport::class, 'id');
+	}
+
 	public function jeuxes()
 	{
 		return $this->hasMany(Jeux::class, 'id_GJ_SUPPORTS');
-	}
-
-	public function p_o_s_s_e_d_e_s_u_p_p_o_r_t_s()
-	{
-		return $this->hasMany(POSSEDESUPPORT::class, 'id');
 	}
 }

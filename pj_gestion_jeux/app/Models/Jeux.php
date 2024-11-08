@@ -23,8 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id_GJ_SUPPORTS
  * 
  * @property Support $support
- * @property Collection|APPARTIENT[] $a_p_p_a_r_t_i_e_n_t_s
- * @property Collection|Collection[] $collections
+ * @property Collection|AppartientGenre[] $appartient_genres
+ * @property Collection|CollectionJeux[] $collection_jeuxes
  *
  * @package App\Models
  */
@@ -55,13 +55,13 @@ class Jeux extends Model
 		return $this->belongsTo(Support::class, 'id_GJ_SUPPORTS');
 	}
 
-	public function a_p_p_a_r_t_i_e_n_t_s()
+	public function appartient_genres()
 	{
-		return $this->hasMany(APPARTIENT::class, 'id');
+		return $this->hasMany(AppartientGenre::class, 'id');
 	}
 
-	public function collections()
+	public function collection_jeuxes()
 	{
-		return $this->hasMany(Collection::class, 'id_GJ_JEUX');
+		return $this->hasMany(CollectionJeux::class, 'id_GJ_JEUX');
 	}
 }

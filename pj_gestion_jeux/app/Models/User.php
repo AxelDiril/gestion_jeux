@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -28,15 +29,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * 
  * @property Role $role
- * @property Collection|Collection[] $collections
+ * @property Collection|CollectionJeux[] $collection_jeuxes
+ * @property Collection|CollectionSupport[] $collection_supports
  * @property Collection|Requete[] $requetes
- * @property Collection|POSSEDESUPPORT[] $p_o_s_s_e_d_e_s_u_p_p_o_r_t_s
  *
  * @package App\Models
  */
-class User extends Model
+class User extends Authenticatable
 {
-	protected $table = 'GJ_users';
+	#protected $table = 'GJ_users';
 
 	protected $casts = [
 		'email_verified_at' => 'datetime',
@@ -67,18 +68,18 @@ class User extends Model
 		return $this->belongsTo(Role::class, 'code');
 	}
 
-	public function collections()
+	public function collection_jeuxes()
 	{
-		return $this->hasMany(Collection::class, 'id_GJ_USERS');
+		return $this->hasMany(CollectionJeux::class, 'id_GJ_USERS');
+	}
+
+	public function collection_supports()
+	{
+		return $this->hasMany(CollectionSupport::class, 'id_GJ_USERS');
 	}
 
 	public function requetes()
 	{
 		return $this->hasMany(Requete::class, 'id_GJ_USERS_VALIDE');
-	}
-
-	public function p_o_s_s_e_d_e_s_u_p_p_o_r_t_s()
-	{
-		return $this->hasMany(POSSEDESUPPORT::class, 'id_GJ_USERS');
 	}
 }
