@@ -25,10 +25,11 @@ CREATE TABLE GJ_USERS(
         mail             Varchar (50) NOT NULL ,
         mail_verified_at TimeStamp NOT NULL ,
         telephone        Varchar (20) NOT NULL ,
-        visibilite       Bool NOT NULL ,
+        visibilite       Bool DEFAULT true NOT NULL ,
         created_at       TimeStamp NOT NULL ,
-        can_contribute   Bool NOT NULL ,
-        code             Char (1) NOT NULL
+        can_contribute   Bool DEFAULT true NOT NULL ,
+        code             Char (1) DEFAULT 'U' NOT NULL,
+        comment		 VarChar (250)																	
 	,CONSTRAINT GJ_USERS_PK PRIMARY KEY (id)
 
 	,CONSTRAINT GJ_USERS_GJ_ROLES_FK FOREIGN KEY (code) REFERENCES GJ_ROLES(code)
@@ -40,10 +41,10 @@ CREATE TABLE GJ_USERS(
 #------------------------------------------------------------
 
 CREATE TABLE GJ_SUPPORTS(
-        id          Int  Auto_increment  NOT NULL ,
-        nom         Varchar (70) NOT NULL ,
-        description Varchar (50) NOT NULL ,
-        date        TimeStamp NOT NULL
+        id   Int  Auto_increment  NOT NULL ,
+        nom  Varchar (70) NOT NULL ,
+        description Varchar (50) ,
+        date_sortie YEAR(4) NOT NULL
 	,CONSTRAINT GJ_SUPPORTS_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
@@ -56,10 +57,10 @@ CREATE TABLE GJ_JEUX(
         id                 Int  Auto_increment  NOT NULL ,
         titre              Varchar (70) NOT NULL ,
         description        Varchar (300) NOT NULL ,
-        date_sortie        TimeStamp NOT NULL ,
+        date_sortie        YEAR(4) NOT NULL ,
         fichier_couverture Varchar (300) NOT NULL ,
-        possede_par        Int NOT NULL ,
-        moyenne            Int NOT NULL ,
+        possede_par        Int DEFAULT 0 NOT NULL ,
+        moyenne            Int ,
         id_GJ_SUPPORTS     Int NOT NULL
 	,CONSTRAINT GJ_JEUX_PK PRIMARY KEY (id)
 
@@ -98,7 +99,7 @@ CREATE TABLE GJ_REQUETES(
         motif              Varchar (300) ,
         titre              Varchar (70) NOT NULL ,
         description        Varchar (500) NOT NULL ,
-        date_sortie        TimeStamp NOT NULL ,
+        date_sortie        YEAR(4) NOT NULL ,
         fichier_couverture Varchar (300) NOT NULL ,
         id_GJ_USERS        Int NOT NULL ,
         id_GJ_STATUT       Int NOT NULL ,
@@ -127,15 +128,15 @@ CREATE TABLE GJ_PROGRESSION(
 #------------------------------------------------------------
 
 CREATE TABLE GJ_COLLECTION(
-        id_GJ_USERS Int NOT NULL ,
         id_GJ_JEUX  Int NOT NULL ,
+        id_GJ_USERS Int NOT NULL ,
         note        Float NOT NULL ,
-        comment     Varchar (300) NOT NULL ,
+        commentaire Varchar (300) NOT NULL ,
         id          Int NOT NULL
-	,CONSTRAINT GJ_COLLECTION_PK PRIMARY KEY (id_GJ_USERS,id_GJ_JEUX)
+	,CONSTRAINT GJ_COLLECTION_PK PRIMARY KEY (id_GJ_JEUX,id_GJ_USERS)
 
-	,CONSTRAINT GJ_COLLECTION_GJ_USERS_FK FOREIGN KEY (id_GJ_USERS) REFERENCES GJ_USERS(id)
-	,CONSTRAINT GJ_COLLECTION_GJ_JEUX0_FK FOREIGN KEY (id_GJ_JEUX) REFERENCES GJ_JEUX(id)
+	,CONSTRAINT GJ_COLLECTION_GJ_JEUX_FK FOREIGN KEY (id_GJ_JEUX) REFERENCES GJ_JEUX(id)
+	,CONSTRAINT GJ_COLLECTION_GJ_USERS0_FK FOREIGN KEY (id_GJ_USERS) REFERENCES GJ_USERS(id)
 	,CONSTRAINT GJ_COLLECTION_GJ_PROGRESSION1_FK FOREIGN KEY (id) REFERENCES GJ_PROGRESSION(id)
 )ENGINE=InnoDB;
 
