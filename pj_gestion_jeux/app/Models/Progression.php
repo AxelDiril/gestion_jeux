@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $libelle
  * 
- * @property Collection|CollectionJeux[] $collection_jeuxes
+ * @property Collection|CollectionGame[] $collection_games
  *
  * @package App\Models
  */
@@ -28,8 +28,8 @@ class Progression extends Model
 		'libelle'
 	];
 
-	public function collection_jeuxes()
+	public function collection_games()
 	{
-		return $this->hasMany(CollectionJeux::class, 'id');
+		return $this->hasMany(CollectionGame::class, 'id');
 	}
 }

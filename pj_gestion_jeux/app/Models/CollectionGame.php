@@ -9,23 +9,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class CollectionJeux
+ * Class CollectionGame
  * 
  * @property int $id_GJ_JEUX
  * @property int $id_GJ_USERS
- * @property float $note
- * @property string $commentaire
+ * @property float|null $note
+ * @property string|null $commentaire
  * @property int $id
  * 
- * @property Jeux $jeux
+ * @property Game $game
  * @property Progression $progression
  * @property User $user
  *
  * @package App\Models
  */
-class CollectionJeux extends Model
+class CollectionGame extends Model
 {
-	protected $table = 'GJ_collection_jeux';
+	protected $table = 'GJ_collection_games';
 	public $incrementing = false;
 	public $timestamps = false;
 
@@ -42,9 +42,9 @@ class CollectionJeux extends Model
 		'id'
 	];
 
-	public function jeux()
+	public function game()
 	{
-		return $this->belongsTo(Jeux::class, 'id_GJ_JEUX');
+		return $this->belongsTo(Game::class, 'id_GJ_JEUX');
 	}
 
 	public function progression()

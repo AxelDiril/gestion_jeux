@@ -8,7 +8,6 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -29,15 +28,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * 
  * @property Role $role
- * @property Collection|CollectionJeux[] $collection_jeuxes
+ * @property Collection|CollectionGame[] $collection_games
  * @property Collection|CollectionSupport[] $collection_supports
  * @property Collection|Requete[] $requetes
  *
  * @package App\Models
  */
-class User extends Authenticatable
+class User extends Model
 {
-	#protected $table = 'GJ_users';
+	protected $table = 'GJ_users';
 
 	protected $casts = [
 		'email_verified_at' => 'datetime',
@@ -68,9 +67,9 @@ class User extends Authenticatable
 		return $this->belongsTo(Role::class, 'code');
 	}
 
-	public function collection_jeuxes()
+	public function collection_games()
 	{
-		return $this->hasMany(CollectionJeux::class, 'id_GJ_USERS');
+		return $this->hasMany(CollectionGame::class, 'id_GJ_USERS');
 	}
 
 	public function collection_supports()

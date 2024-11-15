@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id_GJ_GENRES
  * 
  * @property Genre $genre
- * @property Jeux $jeux
+ * @property Game $game
  *
  * @package App\Models
  */
@@ -35,8 +35,8 @@ class AppartientGenre extends Model
 		return $this->belongsTo(Genre::class, 'id_GJ_GENRES');
 	}
 
-	public function jeux()
+	public function game()
 	{
-		return $this->belongsTo(Jeux::class, 'id');
+		return $this->belongsTo(Game::class, 'id');
 	}
 }

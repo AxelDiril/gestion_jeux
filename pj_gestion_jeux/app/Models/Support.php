@@ -19,13 +19,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $date_sortie
  * 
  * @property Collection|CollectionSupport[] $collection_supports
- * @property Collection|Jeux[] $jeuxes
+ * @property Collection|Game[] $games
  *
  * @package App\Models
  */
 class Support extends Model
 {
-	protected $table = 'GJ_supports';
+
 	public $timestamps = false;
 
 	protected $casts = [
@@ -43,8 +43,8 @@ class Support extends Model
 		return $this->hasMany(CollectionSupport::class, 'id');
 	}
 
-	public function jeuxes()
+	public function games()
 	{
-		return $this->hasMany(Jeux::class, 'id_GJ_SUPPORTS');
+		return $this->hasMany(Game::class, 'id_GJ_SUPPORTS');
 	}
 }

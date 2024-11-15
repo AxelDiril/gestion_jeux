@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Jeux
+ * Class Game
  * 
  * @property int $id
  * @property string $titre
@@ -24,13 +24,13 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property Support $support
  * @property Collection|AppartientGenre[] $appartient_genres
- * @property Collection|CollectionJeux[] $collection_jeuxes
+ * @property Collection|CollectionGame[] $collection_games
  *
  * @package App\Models
  */
-class Jeux extends Model
+class Game extends Model
 {
-	protected $table = 'GJ_jeux';
+
 	public $timestamps = false;
 
 	protected $casts = [
@@ -60,8 +60,8 @@ class Jeux extends Model
 		return $this->hasMany(AppartientGenre::class, 'id');
 	}
 
-	public function collection_jeuxes()
+	public function collection_games()
 	{
-		return $this->hasMany(CollectionJeux::class, 'id_GJ_JEUX');
+		return $this->hasMany(CollectionGame::class, 'id_GJ_JEUX');
 	}
 }
