@@ -13,6 +13,10 @@
         <input type="submit" value="Rechercher"/>
     </form>
 
+    <!-- Link styled as a button -->
+    <a href="{{ url()->current() . '?annee=2020' }}" class="btn btn-primary">Load 2020</a>
+
+
     <!-- Liste des jeux dans GJ_Games -->
     <table border="1">
         <thead>
@@ -29,7 +33,7 @@
                 <td>{{ $jeu->titre }}</td>
                 <td>{{ $jeu->description }}</td>
                 <td>{{ $jeu->date_sortie }}</td>
-                <td>{{ $jeu->support->nom ?? 'N/A' }}</td>
+                <td>{{ $jeu->support->nom }}</td>
             </tr>
             @endforeach
         </tbody>
