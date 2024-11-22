@@ -36,9 +36,14 @@ Route::get('nomdelavue', function () {
 ```
 Route::get('/resource/nomdelavue', [NomDuControlleur::class, 'methodeAExecuterDansLeControlleur']);
 ```
-* Dans le controlleur, ajouter une méthode avec le nom précisé dans la route :
+* Dans le controlleur, ajouter en début de fichier le modèle à utiliser :
 ```
-public function liste_jeux(Request $request){        
+use app/Models/NomModele
+```
+
+* Ajouter une méthode avec le nom précisé dans la route :
+```
+public function liste_jeux(){        
     $listeEnregistrements = NomModele::all();
     return view('nomdelavue', compact('listeEnregistrements'));
 }
@@ -78,7 +83,7 @@ public function liste_jeux(Request $request){
 * Utile pour créer une page par défaut et en changer seulement le contenu.
 
 ## Récupérer un paramètre GET passé en lien
-* Dans le controlleur rajouter dans les paramètres de la méthode principale `Request $request`.
+* Dans le controlleur, rajouter dans les paramètres de la méthode principale `Request $request`.
 * La classe `Request` renvoie un tableau de toutes les paramètres passés en lien de la page `("?id=" par exemple)`.
 * Pour récupèrer la valeur d'un paramètre en particulier, faire :
 ```
