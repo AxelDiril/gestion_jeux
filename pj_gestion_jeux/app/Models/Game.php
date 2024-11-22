@@ -34,7 +34,7 @@ class Game extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'date_sortie' => 'String',
+		'date_sortie' => 'string',
 		'possede_par' => 'int',
 		'moyenne' => 'int',
 		'id_GJ_SUPPORTS' => 'int'

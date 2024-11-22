@@ -1,42 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste de jeux</title>
-</head>
-<body>
+@extends('layouts/structure')
+
+@section('titre')
+    Liste de jeux
+@stop
+
+@section('css')
+    <link rel="stylesheet" href="{{ asset('styles/liste_jeux.css') }}">
+@stop
+
+@section('contenu')
     <h1>Liste de jeux</h1>
 
-    <form>
-        <input type="text"/>
-        <input type="submit" value="Rechercher"/>
+    <form method="GET">
+        <select name="support">
+            <option value="tous">Tous supports</option>
+            @foreach($arSupports as $support)
+                <option value="{{ $support->id }}">{{ $support->nom }}</option>
+            @endforeach
+        </select>
+        <select name="annee">
+            <option value="toutes">Toutes les années</option>
+            @foreach($arAnnees as $annee)
+                <option value="{{ $annee->date_sortie }}">{{ $annee->date_sortie }}</option>
+            @endforeach
+        </select>
+        <input type="submit" value="Actualiser"/>
     </form>
 
-    <!-- Link styled as a button -->
-    <a href="{{ url()->current() . '?annee=2020' }}" class="btn btn-primary">Load 2020</a>
-
-
-    <!-- Liste des jeux dans GJ_Games -->
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Date Sortie</th>
-                <th>Support</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($jeux as $jeu)
-            <tr>
-                <td>{{ $jeu->titre }}</td>
-                <td>{{ $jeu->description }}</td>
-                <td>{{ $jeu->date_sortie }}</td>
-                <td>{{ $jeu->support->nom }}</td>
-            </tr>
+    @if($arGames->isEmpty())
+        <p>Aucun résultat ne correspond à votre requête</p>
+    @else
+        <!-- Liste des jeux dans GJ_Games -->
+        <div class="game_grid">
+            @foreach($arGames as $game)
+            <div class="game_item">
+                    <p>{{ $game->titre }}</p>
+                    <p>{{ $game->date_sortie }}</p>
+                    <p>{{ $game->support->nom }}</p>
+            </div>
             @endforeach
-        </tbody>
-    </table>
-</body>
-</html>
+        </div>
+    @endif
+@stop

@@ -1,0 +1,15 @@
+body{
+    padding : 0;
+    margin : 0;
+    flex-direction: column;
+}
+
+header{
+    background: rgb(19, 145, 118); 
+    padding: 1em;
+}
+
+footer{
+    background: rgb(19, 145, 118); 
+    padding: 1em;
+}

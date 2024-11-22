@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Genre extends Model
 {
-	protected $table = 'GJ_genres';
 	public $timestamps = false;
 
 	protected $fillable = [
