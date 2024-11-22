@@ -6,6 +6,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\SupportController;
 
 Route::get('/liste_jeux', [GameController::class, 'liste_jeux']);
+Route::get('/detail_jeu', [GameController::class, 'detail_jeu']);
 Route::get('/liste_supports', [SupportController::class, 'liste_supports']);
 
 Route::get('/', function () {

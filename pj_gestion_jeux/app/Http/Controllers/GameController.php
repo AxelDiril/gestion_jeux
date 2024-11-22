@@ -55,4 +55,22 @@ class GameController extends Controller
         // Envoie les jeux, les supports et toutes les années
         return view('pages/liste_jeux', compact('arGames', 'arSupports', 'arAnnees', "arGenres", 'nom', 'support', 'annee', 'genre'));
     }
+
+    public function detail_jeu(Request $request){
+
+        $id = $request->query('id');
+
+        // Construction de la requête pour l'appel des jeux
+        $arGames = Game::query();
+
+        // Filtres
+        if(!empty($id)){
+            $arGames->where('id',$id);
+        }
+
+        $arGames = $arGames->get();
+
+        // Envoie le jeu
+        return view('pages/detail_jeu', compact('arGames', 'id'));
+    }
 }
