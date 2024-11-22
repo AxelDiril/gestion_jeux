@@ -23,7 +23,6 @@ class GameController extends Controller
         $arGames = Game::query();
 
         // Jointure avec GJ_appartient_genres
-
         $arGames = $arGames->join('appartient_genres',"games.id", "=", "appartient_genres.id");
 
         // Ordonner la requête
@@ -52,7 +51,6 @@ class GameController extends Controller
         $arSupports = Support::orderBy('nom','asc')->get();
         $arGenres = Genre::orderBy('label','asc')->get();
         $arAnnees = Game::select('date_sortie')->distinct()->orderBy('date_sortie','desc')->get();
-
 
         // Envoie les jeux, les supports et toutes les années
         return view('pages/liste_jeux', compact('arGames', 'arSupports', 'arAnnees', "arGenres", 'nom', 'support', 'annee', 'genre'));

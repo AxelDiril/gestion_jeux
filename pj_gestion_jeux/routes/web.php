@@ -3,8 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\SupportController;
 
 Route::get('/liste_jeux', [GameController::class, 'liste_jeux']);
+Route::get('/liste_supports', [SupportController::class, 'liste_supports']);
 
 Route::get('/', function () {
     return view('welcome');

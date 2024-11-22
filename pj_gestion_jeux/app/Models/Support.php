@@ -29,7 +29,7 @@ class Support extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'date_sortie' => 'datetime'
+		'date_sortie' => 'string'
 	];
 
 	protected $fillable = [
