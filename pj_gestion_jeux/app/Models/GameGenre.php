@@ -9,34 +9,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class AppartientGenre
+ * Class GameGenre
  * 
- * @property int $id
- * @property int $id_GJ_GENRES
+ * @property int $game_id
+ * @property int $genre_id
  * 
  * @property Genre $genre
  * @property Game $game
  *
  * @package App\Models
  */
-class AppartientGenre extends Model
+class GameGenre extends Model
 {
-	protected $table = 'GJ_appartient_genres';
+	//protected $table = 'GJ_game_genres';
 	public $incrementing = false;
 	public $timestamps = false;
 
 	protected $casts = [
-		'id' => 'int',
-		'id_GJ_GENRES' => 'int'
+		'game_id' => 'int',
+		'genre_id' => 'int'
 	];
 
 	public function genre()
 	{
-		return $this->belongsTo(Genre::class, 'id_GJ_GENRES');
+		return $this->belongsTo(Genre::class);
 	}
 
 	public function game()
 	{
-		return $this->belongsTo(Game::class, 'id');
+		return $this->belongsTo(Game::class);
 	}
 }

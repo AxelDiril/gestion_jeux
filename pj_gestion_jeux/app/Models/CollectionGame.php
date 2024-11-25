@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class CollectionGame
  * 
- * @property int $id_GJ_JEUX
- * @property int $id_GJ_USERS
- * @property float|null $note
- * @property string|null $commentaire
+ * @property int $game_id
  * @property int $id
+ * @property float|null $note
+ * @property string|null $comment
+ * @property int $progress_id
  * 
  * @property Game $game
  * @property Progression $progression
@@ -25,35 +25,35 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CollectionGame extends Model
 {
-	protected $table = 'GJ_collection_games';
+	//protected $table = 'GJ_collection_games';
 	public $incrementing = false;
 	public $timestamps = false;
 
 	protected $casts = [
-		'id_GJ_JEUX' => 'int',
-		'id_GJ_USERS' => 'int',
+		'game_id' => 'int',
+		'id' => 'int',
 		'note' => 'float',
-		'id' => 'int'
+		'progress_id' => 'int'
 	];
 
 	protected $fillable = [
 		'note',
-		'commentaire',
-		'id'
+		'comment',
+		'progress_id'
 	];
 
 	public function game()
 	{
-		return $this->belongsTo(Game::class, 'id_GJ_JEUX');
+		return $this->belongsTo(Game::class);
 	}
 
 	public function progression()
 	{
-		return $this->belongsTo(Progression::class, 'id');
+		return $this->belongsTo(Progression::class, 'progress_id');
 	}
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'id_GJ_USERS');
+		return $this->belongsTo(User::class, 'id');
 	}
 }

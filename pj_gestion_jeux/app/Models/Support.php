@@ -13,10 +13,12 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Support
  * 
- * @property int $id
- * @property string $nom
- * @property string|null $description
- * @property Carbon $date_sortie
+ * @property int $support_id
+ * @property string $support_name
+ * @property string|null $support_desc
+ * @property Carbon $support_year
+ * @property string|null $support_pic
+ * @property string|null $support_logo
  * 
  * @property Collection|CollectionSupport[] $collection_supports
  * @property Collection|Game[] $games
@@ -25,26 +27,29 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Support extends Model
 {
-
+	//protected $table = 'GJ_supports';
+	protected $primaryKey = 'support_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'date_sortie' => 'string'
+		'support_year' => 'string'
 	];
 
 	protected $fillable = [
-		'nom',
-		'description',
-		'date_sortie'
+		'support_name',
+		'support_desc',
+		'support_year',
+		'support_pic',
+		'support_logo'
 	];
 
 	public function collection_supports()
 	{
-		return $this->hasMany(CollectionSupport::class, 'id');
+		return $this->hasMany(CollectionSupport::class);
 	}
 
 	public function games()
 	{
-		return $this->hasMany(Game::class, 'id_GJ_SUPPORTS');
+		return $this->hasMany(Game::class);
 	}
 }

@@ -9,32 +9,32 @@ class SupportController extends Controller
 {
     public function liste_supports(Request $request){
 
-        $nom = $request->query('nom');
-        $annee = $request->query('annee');
-        $ordre = $request->query('ordre');
-        $sens = $request->query('ordre_sens');
+        $strSupportName = $request->query('support_name');
+        $iSupportYear = $request->query('support_year');
+        $strOrder = $request->query('order');
+        $strDirection = $request->query('direction');
 
         // Construction de la requête pour l'appel des jeux
         $arSupports = Support::query();
 
         // Ordonner la requête
-        if(!empty($ordre) && !empty($sens)){
-            $arSupports = $arSupports->orderBy($ordre,$sens);
+        if(!empty($strOrder) && !empty($strDirection)){
+            $arSupports = $arSupports->orderBy($strOrder,$strDirection);
         }
 
         // Filtres
-        if(!empty($nom) && $nom != "tous"){
-            $arSupports->where('nom','LIKE','%'.$nom.'%');
+        if(!empty($strSupportName) && $strSupportName != "all"){
+            $arSupports->where('support_name','LIKE','%'.$strSupportName.'%');
         }
 
-        if(!empty($annee) && $annee != "toutes"){
-            $arSupports->whereYear('date_sortie',$annee);
+        if(!empty($iSupportYear) && $iSupportYear != "all"){
+            $arSupports->whereYear('support_year',$iSupportYear);
         }
 
         $arSupports = $arSupports->get();
-        $arAnnees = Support::select('date_sortie')->distinct()->orderBy('date_sortie','desc')->get();
+        $arYears = Support::select('support_year')->distinct()->orderBy('support_year','desc')->get();
 
-        // Envoie les jeux, les supports et toutes les années
-        return view('pages/liste_supports', compact('arSupports', 'arAnnees', 'nom', 'annee'));
+        // Envoie les jeux, les supports et all les années
+        return view('pages/liste_supports', compact('arSupports', 'arYears', 'strSupportName', 'iSupportYear'));
     }
 }

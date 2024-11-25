@@ -10,23 +10,23 @@
     <h1>Liste des supports</h1>
 
     <form method="GET">
-        <input type="text" name="nom" placeholder="Nom du support..." value="{{ $nom }}">
-        <select name="annee">
-            <option value="toutes">Toutes les années</option>
-            @foreach($arAnnees as $keyAnnee)
-                <option value="{{ $keyAnnee->date_sortie }}" 
-                {{ $keyAnnee->date_sortie == $annee ? 'selected' : '' }}>
-                {{ $keyAnnee->date_sortie }}
+        <input type="text" name="support_name" placeholder="Nom du support..." value="{{ $strSupportName}}">
+        <select name="support_year">
+            <option value="all">Toutes les années</option>
+            @foreach($arYears as $keyYear)
+                <option value="{{ $keyYear->support_year }}" 
+                {{ $keyYear->support_year == $iSupportYear ? 'selected' : '' }}>
+                {{ $keyYear->support_year }}
             </option>
             @endforeach
         </select>
-        <select name="ordre">
-            <option value="nom" {{ request()->get('ordre') == 'nom' ? 'selected' : '' }}>Ordre alphabetique</option>
-            <option value="date_sortie" {{ request()->get('ordre') == 'date_sortie' ? 'selected' : '' }}>Année</option>
+        <select name="order">
+            <option value="support_name" {{ request()->get('order') == 'support_name' ? 'selected' : '' }}>Ordre alphabetique</option>
+            <option value="support_year" {{ request()->get('order') == 'support_year' ? 'selected' : '' }}>Année</option>
         </select>
-        <select name="ordre_sens">
-            <option value="asc" {{ request()->get('ordre_sens') == 'asc' ? 'selected' : '' }}>Croissant</option>
-            <option value="desc" {{ request()->get('ordre_sens') == 'desc' ? 'selected' : '' }}>Décroissant</option>
+        <select name="direction">
+            <option value="asc" {{ request()->get('direction') == 'asc' ? 'selected' : '' }}>Croissant</option>
+            <option value="desc" {{ request()->get('direction') == 'desc' ? 'selected' : '' }}>Décroissant</option>
         </select>
 
         <input type="submit" value="Actualiser"/>
@@ -39,8 +39,8 @@
         <div class="game_grid">
             @foreach($arSupports as $keySupport)
             <div class="game_item">
-                    <p>{{ $keySupport->nom }}</p>
-                    <p>{{ $keySupport->date_sortie }}</p>
+                    <p>{{ $keySupport->support_name }}</p>
+                    <p>{{ $keySupport->support_year }}</p>
             </div>
             @endforeach
         </div>

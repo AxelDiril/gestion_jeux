@@ -39,7 +39,7 @@ CREATE TABLE GJ_users (
 
 CREATE TABLE GJ_supports (
     id INT AUTO_INCREMENT NOT NULL,
-    nom VARCHAR(70) NOT NULL,
+    Name VARCHAR(70) NOT NULL,
     description VARCHAR(50),
     date_sortie YEAR(4) NOT NULL,
 

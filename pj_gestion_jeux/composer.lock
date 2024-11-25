@@ -1090,7 +1090,7 @@
                 "league/flysystem": "^3.8.0",
                 "monolog/monolog": "^3.0",
                 "nesbot/carbon": "^2.72.2|^3.0",
-                "nunomaduro/termwind": "^2.0",
+                "nuNameaduro/termwind": "^2.0",
                 "php": "^8.2",
                 "psr/container": "^1.1.1|^2.0.1",
                 "psr/log": "^1.0|^2.0|^3.0",
@@ -2241,16 +2241,16 @@
             "time": "2024-10-08T18:51:32+00:00"
         },
         {
-            "name": "nunomaduro/termwind",
+            "name": "nuNameaduro/termwind",
             "version": "v2.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nunomaduro/termwind.git",
+                "url": "https://github.com/nuNameaduro/termwind.git",
                 "reference": "42c84e4e8090766bbd6445d06cd6e57650626ea3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/termwind/zipball/42c84e4e8090766bbd6445d06cd6e57650626ea3",
+                "url": "https://api.github.com/repos/nuNameaduro/termwind/zipball/42c84e4e8090766bbd6445d06cd6e57650626ea3",
                 "reference": "42c84e4e8090766bbd6445d06cd6e57650626ea3",
                 "shasum": ""
             },
@@ -2295,7 +2295,7 @@
             "authors": [
                 {
                     "name": "Nuno Maduro",
-                    "email": "enunomaduro@gmail.com"
+                    "email": "enuNameaduro@gmail.com"
                 }
             ],
             "description": "Its like Tailwind CSS, but for the console.",
@@ -2308,16 +2308,16 @@
                 "style"
             ],
             "support": {
-                "issues": "https://github.com/nunomaduro/termwind/issues",
-                "source": "https://github.com/nunomaduro/termwind/tree/v2.2.0"
+                "issues": "https://github.com/nuNameaduro/termwind/issues",
+                "source": "https://github.com/nuNameaduro/termwind/tree/v2.2.0"
             },
             "funding": [
                 {
-                    "url": "https://www.paypal.com/paypalme/enunomaduro",
+                    "url": "https://www.paypal.com/paypalme/enuNameaduro",
                     "type": "custom"
                 },
                 {
-                    "url": "https://github.com/nunomaduro",
+                    "url": "https://github.com/nuNameaduro",
                     "type": "github"
                 },
                 {
@@ -6036,7 +6036,7 @@
                 "illuminate/log": "^10.24|^11.0",
                 "illuminate/process": "^10.24|^11.0",
                 "illuminate/support": "^10.24|^11.0",
-                "nunomaduro/termwind": "^1.15|^2.0",
+                "nuNameaduro/termwind": "^1.15|^2.0",
                 "php": "^8.2",
                 "symfony/console": "^6.0|^7.0"
             },
@@ -6076,7 +6076,7 @@
                 },
                 {
                     "name": "Nuno Maduro",
-                    "email": "enunomaduro@gmail.com"
+                    "email": "enuNameaduro@gmail.com"
                 }
             ],
             "description": "Easily delve into your Laravel application's log files directly from the command line.",
@@ -6120,7 +6120,7 @@
                 "larastan/larastan": "^2.9.8",
                 "laravel-zero/framework": "^10.4.0",
                 "mockery/mockery": "^1.6.12",
-                "nunomaduro/termwind": "^1.15.1",
+                "nuNameaduro/termwind": "^1.15.1",
                 "pestphp/pest": "^2.35.1"
             },
             "bin": [
@@ -6141,7 +6141,7 @@
             "authors": [
                 {
                     "name": "Nuno Maduro",
-                    "email": "enunomaduro@gmail.com"
+                    "email": "enuNameaduro@gmail.com"
                 }
             ],
             "description": "An opinionated code formatter for PHP.",
@@ -6366,22 +6366,22 @@
             "time": "2024-11-08T17:47:46+00:00"
         },
         {
-            "name": "nunomaduro/collision",
+            "name": "nuNameaduro/collision",
             "version": "v8.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nunomaduro/collision.git",
+                "url": "https://github.com/nuNameaduro/collision.git",
                 "reference": "f5c101b929c958e849a633283adff296ed5f38f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/f5c101b929c958e849a633283adff296ed5f38f5",
+                "url": "https://api.github.com/repos/nuNameaduro/collision/zipball/f5c101b929c958e849a633283adff296ed5f38f5",
                 "reference": "f5c101b929c958e849a633283adff296ed5f38f5",
                 "shasum": ""
             },
             "require": {
                 "filp/whoops": "^2.16.0",
-                "nunomaduro/termwind": "^2.1.0",
+                "nuNameaduro/termwind": "^2.1.0",
                 "php": "^8.2.0",
                 "symfony/console": "^7.1.5"
             },
@@ -6404,7 +6404,7 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider"
+                        "NuNameaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider"
                     ]
                 },
                 "branch-alias": {
@@ -6416,7 +6416,7 @@
                     "./src/Adapters/Phpunit/Autoload.php"
                 ],
                 "psr-4": {
-                    "NunoMaduro\\Collision\\": "src/"
+                    "NuNameaduro\\Collision\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -6426,7 +6426,7 @@
             "authors": [
                 {
                     "name": "Nuno Maduro",
-                    "email": "enunomaduro@gmail.com"
+                    "email": "enuNameaduro@gmail.com"
                 }
             ],
             "description": "Cli error handling for console/command-line PHP applications.",
@@ -6443,20 +6443,20 @@
                 "symfony"
             ],
             "support": {
-                "issues": "https://github.com/nunomaduro/collision/issues",
-                "source": "https://github.com/nunomaduro/collision"
+                "issues": "https://github.com/nuNameaduro/collision/issues",
+                "source": "https://github.com/nuNameaduro/collision"
             },
             "funding": [
                 {
-                    "url": "https://www.paypal.com/paypalme/enunomaduro",
+                    "url": "https://www.paypal.com/paypalme/enuNameaduro",
                     "type": "custom"
                 },
                 {
-                    "url": "https://github.com/nunomaduro",
+                    "url": "https://github.com/nuNameaduro",
                     "type": "github"
                 },
                 {
-                    "url": "https://www.patreon.com/nunomaduro",
+                    "url": "https://www.patreon.com/nuNameaduro",
                     "type": "patreon"
                 }
             ],

@@ -24,8 +24,8 @@
 * Aller dans `/routes/web.php`.
 * Créer une route en faisant :
 ```
-Route::get('nomdelavue', function () {
-    return view('nomdelavue');
+Route::get('Namedelavue', function () {
+    return view('Namedelavue');
 });
 ```
 
@@ -34,25 +34,25 @@ Route::get('nomdelavue', function () {
 * Aller dans `/routes/web.php`.
 * Créer une route en faisant :
 ```
-Route::get('/resource/nomdelavue', [NomDuControlleur::class, 'methodeAExecuterDansLeControlleur']);
+Route::get('/resource/Namedelavue', [NameDuControlleur::class, 'methodeAExecuterDansLeControlleur']);
 ```
 * Dans le controlleur, ajouter en début de fichier le modèle à utiliser :
 ```
-use app/Models/NomModele
+use app/Models/NameModele
 ```
 
-* Ajouter une méthode avec le nom précisé dans la route :
+* Ajouter une méthode avec le Name précisé dans la route :
 ```
 public function liste_jeux(){        
-    $listeEnregistrements = NomModele::all();
-    return view('nomdelavue', compact('listeEnregistrements'));
+    $listeEnregistrements = NameModele::all();
+    return view('Namedelavue', compact('listeEnregistrements'));
 }
 ```
 * Dans la vue, manipuler la liste des enregistrements avec la variable `$listeEnregistrements`. Peut être utilisée avec un `foreach` pour parcourir la liste.
 
 ## Appel à la base de données avec une condition "WHERE"
 
-* À la déclaration de la liste des enregistrements dans le controlleur, remplacer `all()` par `where('nomduchamp','valeuràvérifier')->get()`. Les `where()` peuvent être cumulés pour vérifier plusieurs conditions en même temps.
+* À la déclaration de la liste des enregistrements dans le controlleur, remplacer `all()` par `where('Nameduchamp','valeuràvérifier')->get()`. Les `where()` peuvent être cumulés pour vérifier plusieurs conditions en même temps.
 
 ## Importer des blocs de code dans un fichier
 
@@ -60,32 +60,32 @@ public function liste_jeux(){
 
 * Dans le fichier du code à importer, créer un bloc :
 ```
-@section('nomdelasection')
+@section('Namedelasection')
     //contenu de la section
 @stop
 ```
 * Dans un autre fichier où il faut importer le code, mettre :
 ```
-@yield('nomdelasection') // Remettre le même nom de section
+@yield('Namedelasection') // Remettre le même Name de section
 ```
 
 ### Pour tout le code d'un fichier
 * Dans un fichier où il faut importer tout le code d'un autre fichier, mettre :
 ```
-@include('nomdufichier')
+@include('Namedufichier')
 ```
 
 ### Pour importer un fichier de Template (Layout)
 * Dans les fichier où il faut importer tout le squelette d'une page, mettre :
 ```
-@extends('nomdufichier')
+@extends('Namedufichier')
 ```
 * Utile pour créer une page par défaut et en changer seulement le contenu.
 
 ## Récupérer un paramètre GET passé en lien
 * Dans le controlleur, rajouter dans les paramètres de la méthode principale `Request $request`.
-* La classe `Request` renvoie un tableau de toutes les paramètres passés en lien de la page `("?id=" par exemple)`.
+* La classe `Request` renvoie un tableau de all les paramètres passés en lien de la page `("?id=" par exemple)`.
 * Pour récupèrer la valeur d'un paramètre en particulier, faire :
 ```
-$valeurDuParametre = $request->query('nomduparametre');
+$valeurDuParametre = $request->query('Nameduparametre');
 ```

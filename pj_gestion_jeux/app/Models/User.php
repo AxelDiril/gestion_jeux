@@ -1,11 +1,14 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable; // Add this line
-use Illuminate\Notifications\Notifiable;
 
 /**
  * Class User
@@ -27,56 +30,55 @@ use Illuminate\Notifications\Notifiable;
  * @property Role $role
  * @property Collection|CollectionGame[] $collection_games
  * @property Collection|CollectionSupport[] $collection_supports
- * @property Collection|Requete[] $requetes
+ * @property Collection|Request[] $requests
  *
  * @package App\Models
  */
-class User extends Authenticatable // Change this line to extend Authenticatable
+class User extends Model
 {
-    use Notifiable; // You might need this if you're using notifications
+	//protected $table = 'GJ_users';
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'visibilite' => 'bool',
-        'can_contribute' => 'bool'
-    ];
+	protected $casts = [
+		'email_verified_at' => 'datetime',
+		'visibilite' => 'bool',
+		'can_contribute' => 'bool'
+	];
 
-    protected $hidden = [
-        'password',
-        'remember_token'
-    ];
+	protected $hidden = [
+		'password',
+		'remember_token'
+	];
 
-    protected $fillable = [
-        'name',
-        'email',
-        'email_verified_at',
-        'password',
-        'remember_token',
-        'telephone',
-        'visibilite',
-        'can_contribute',
-        'code',
-        'comment'
-    ];
+	protected $fillable = [
+		'name',
+		'email',
+		'email_verified_at',
+		'password',
+		'remember_token',
+		'telephone',
+		'visibilite',
+		'can_contribute',
+		'code',
+		'comment'
+	];
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class, 'code');
-    }
+	public function role()
+	{
+		return $this->belongsTo(Role::class, 'code');
+	}
 
-    public function collection_games()
-    {
-        return $this->hasMany(CollectionGame::class, 'id_GJ_USERS');
-    }
+	public function collection_games()
+	{
+		return $this->hasMany(CollectionGame::class, 'id');
+	}
 
-    public function collection_supports()
-    {
-        return $this->hasMany(CollectionSupport::class, 'id_GJ_USERS');
-    }
+	public function collection_supports()
+	{
+		return $this->hasMany(CollectionSupport::class, 'id');
+	}
 
-    public function requetes()
-    {
-        return $this->hasMany(Requete::class, 'id_GJ_USERS_VALIDE');
-    }
+	public function requests()
+	{
+		return $this->hasMany(Request::class, 'valide_id');
+	}
 }
-

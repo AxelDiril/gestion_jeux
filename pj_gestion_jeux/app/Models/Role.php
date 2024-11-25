@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Role
  * 
- * @property string $code
- * @property string $label
+ * @property string $role_code
+ * @property string $role_label
  * 
  * @property Collection|User[] $users
  *
@@ -22,12 +22,12 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
 	protected $table = 'GJ_roles';
-	protected $primaryKey = 'code';
+	protected $primaryKey = 'role_code';
 	public $incrementing = false;
 	public $timestamps = false;
 
 	protected $fillable = [
-		'label'
+		'role_label'
 	];
 
 	public function users()

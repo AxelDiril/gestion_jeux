@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class CollectionSupport
  * 
+ * @property int $support_id
  * @property int $id
- * @property int $id_GJ_USERS
  * 
  * @property Support $support
  * @property User $user
@@ -21,22 +21,22 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CollectionSupport extends Model
 {
-	protected $table = 'GJ_collection_supports';
+	//protected $table = 'GJ_collection_supports';
 	public $incrementing = false;
 	public $timestamps = false;
 
 	protected $casts = [
-		'id' => 'int',
-		'id_GJ_USERS' => 'int'
+		'support_id' => 'int',
+		'id' => 'int'
 	];
 
 	public function support()
 	{
-		return $this->belongsTo(Support::class, 'id');
+		return $this->belongsTo(Support::class);
 	}
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'id_GJ_USERS');
+		return $this->belongsTo(User::class, 'id');
 	}
 }
