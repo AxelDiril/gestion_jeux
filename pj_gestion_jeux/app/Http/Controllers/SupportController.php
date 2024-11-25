@@ -37,4 +37,20 @@ class SupportController extends Controller
         // Envoie les jeux, les supports et all les années
         return view('pages/liste_supports', compact('arSupports', 'arYears', 'strSupportName', 'iSupportYear'));
     }
+
+    public function detail_support(Request $request)
+    {
+        $iSupportId = $request->query('support_id');
+
+        $objSupport = Support::query();
+
+        if (!empty($iSupportId)) {
+            $objSupport->where('support_id', $iSupportId);
+        }
+
+        $objSupport = $objSupport->first();
+
+        return view('pages/detail_support', compact('objSupport', 'iSupportId'));
+    }
+
 }

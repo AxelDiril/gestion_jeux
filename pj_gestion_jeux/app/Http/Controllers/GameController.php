@@ -21,57 +21,57 @@ class GameController extends Controller
         $iGenreId = $request->query('genre_id');
 
         // Construction de la requête pour l'appel des jeux
-        $arGames = Game::query();
+        $objGame = Game::query();
 
         // Jointure avec GJ_appartient_genres
-        $arGames = $arGames->join('game_genres',"games.game_id", "=", "game_genres.game_id");
+        $objGame = $objGame->join('game_genres',"games.game_id", "=", "game_genres.game_id");
 
         // Ordonner la requête
         if(!empty($strOrder) && !empty($strDirection)){
-            $arGames = $arGames->orderBy($strOrder,$strDirection);
+            $objGame = $objGame->orderBy($strOrder,$strDirection);
         }
 
         // Filtres
         if(!empty($strGameName) && $strGameName != "all"){
-            $arGames->where('game_name','LIKE','%'.$strName.'%');
+            $objGame->where('game_name','LIKE','%'.$strName.'%');
         }
 
         if(!empty($iSupportId) && $iSupportId != "all"){
-            $arGames->where('support_id',$iSupportId);
+            $objGame->where('support_id',$iSupportId);
         }
 
         if(!empty($iGenreId) && $iGenreId != "all"){
-            $arGames->where('genre_id',$iGenreId);
+            $objGame->where('genre_id',$iGenreId);
         }
 
         if(!empty($iGameYear) && $iGameYear != "all"){
-            $arGames->whereYear('game_year',$iGameYear);
+            $objGame->whereYear('game_year',$iGameYear);
         }
 
-        $arGames = $arGames->get();
+        $objGame = $objGame->get();
         $arSupports = Support::orderBy('support_name','asc')->get();
         $arGenres = Genre::orderBy('genre_label','asc')->get();
         $arYears = Game::select('game_year')->distinct()->orderBy('game_year','desc')->get();
 
         // Envoie les jeux, les supports et all les années
-        return view('pages/liste_jeux', compact('arGames', 'arSupports', 'arYears', "arGenres", 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId'));
+        return view('pages/liste_jeux', compact('objGame', 'arSupports', 'arYears', "arGenres", 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId'));
     }
 
     public function detail_jeu(Request $request){
 
-        $iGameId = $request->query('id');
+        $iGameId = $request->query('game_id');
 
-        // Construction de la requête pour l'appel des jeux
-        $arGames = Game::query();
+        // Construction de la requête pour l'appel du jeu à détailler
+        $objGame = Game::query();
 
-        // Filtres
-        if(!empty($id)){
-            $arGames->where('game_id',$iGameId);
+        if(!empty($iGameId)){
+            $objGame->where('game_id',$iGameId);
         }
 
-        $arGames = $arGames->get();
+        //Obtenir l'unique jeu
+        $objGame = $objGame->first();
 
         // Charge la page avec les détails du jeu concerné
-        return view('pages/detail_jeu', compact('arGames', 'iGameId'));
+        return view('pages/detail_jeu', compact('objGame', 'iGameId'));
     }
 }
