@@ -1,13 +1,13 @@
 @extends('layouts/structure')
 
 @section('titre')
-    {{ $objGame->game_name }}
+    {{ $iGameId != null && isset($objGame) ? $objGame->game_name : 'Erreur' }}
 @stop
 
 @section('css', asset('styles/liste_jeux.css'))
 
 @section('contenu')
-    @if($iGameId == null)
+    @if($iGameId == null || isset($objGame) == false)
         <p>Aucun jeu n'a été sélectionné</p>
     @else
         <h1>{{ $objGame->game_name }}</h1>
@@ -24,5 +24,6 @@
         <p>Moyenne : {{$objGame->rating}}</p>
         <p>Description : {{ $objGame->game_desc }}</p>
     @endif
+    <a href="/liste_jeux">Retour à la liste des jeux</a>
 @stop
 

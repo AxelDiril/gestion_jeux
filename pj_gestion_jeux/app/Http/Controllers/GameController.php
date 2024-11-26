@@ -21,40 +21,40 @@ class GameController extends Controller
         $iGenreId = $request->query('genre_id');
 
         // Construction de la requête pour l'appel des jeux
-        $objGame = Game::query();
+        $arGames = Game::query();
 
         // Jointure avec GJ_appartient_genres
-        $objGame = $objGame->join('game_genres',"games.game_id", "=", "game_genres.game_id");
+        $arGames = $arGames->join('game_genres',"games.game_id", "=", "game_genres.game_id");
 
         // Ordonner la requête
         if(!empty($strOrder) && !empty($strDirection)){
-            $objGame = $objGame->orderBy($strOrder,$strDirection);
+            $arGames = $arGames->orderBy($strOrder,$strDirection);
         }
 
         // Filtres
         if(!empty($strGameName) && $strGameName != "all"){
-            $objGame->where('game_name','LIKE','%'.$strName.'%');
+            $arGames->where('game_name','LIKE','%'.$strGameName.'%');
         }
 
         if(!empty($iSupportId) && $iSupportId != "all"){
-            $objGame->where('support_id',$iSupportId);
+            $arGames->where('support_id',$iSupportId);
         }
 
         if(!empty($iGenreId) && $iGenreId != "all"){
-            $objGame->where('genre_id',$iGenreId);
+            $arGames->where('genre_id',$iGenreId);
         }
 
         if(!empty($iGameYear) && $iGameYear != "all"){
-            $objGame->whereYear('game_year',$iGameYear);
+            $arGames->whereYear('game_year',$iGameYear);
         }
 
-        $objGame = $objGame->get();
+        $arGames = $arGames->get();
         $arSupports = Support::orderBy('support_name','asc')->get();
         $arGenres = Genre::orderBy('genre_label','asc')->get();
         $arYears = Game::select('game_year')->distinct()->orderBy('game_year','desc')->get();
 
         // Envoie les jeux, les supports et all les années
-        return view('pages/liste_jeux', compact('objGame', 'arSupports', 'arYears', "arGenres", 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId'));
+        return view('pages/liste_jeux', compact('arGames', 'arSupports', 'arYears', "arGenres", 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId'));
     }
 
     public function detail_jeu(Request $request){

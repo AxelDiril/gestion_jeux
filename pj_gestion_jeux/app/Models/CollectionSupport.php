@@ -27,7 +27,9 @@ class CollectionSupport extends Model
 
 	protected $casts = [
 		'support_id' => 'int',
-		'id' => 'int'
+		'id' => 'int',
+		'comment' => 'string',
+		'added_at' => 'timestamp'
 	];
 
 	public function support()

@@ -33,7 +33,8 @@ class CollectionGame extends Model
 		'game_id' => 'int',
 		'id' => 'int',
 		'note' => 'float',
-		'progress_id' => 'int'
+		'progress_id' => 'int',
+		'added_at' => 'timestamp'
 	];
 
 	protected $fillable = [

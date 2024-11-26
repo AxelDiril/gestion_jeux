@@ -10,7 +10,7 @@
     <h1>Liste de jeux</h1>
 
     <form method="GET">
-        <input type="text" name="Name" placeholder="Nom du jeu..." value="{{ $strGameName }}">
+        <input type="text" name="game_name" placeholder="Nom du jeu..." value="{{ $strGameName }}">
         <select name="support">
             <option value="all">Tous supports</option>
             @foreach($arSupports as $keySupport)
@@ -58,7 +58,7 @@
         <div class="game_grid">
             @foreach($arGames as $keyGame)
             <div class="game_item">
-                    <p>{{ $keyGame->game_name }}</p>
+                    <a href="/detail_jeu?game_id={{ $keyGame->game_id }}">{{ $keyGame->game_name }}</a>
                     <p>{{ $keyGame->game_year }}</p>
                     <p>{{ $keyGame->support->support_name }}</p>
             </div>
