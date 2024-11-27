@@ -34,7 +34,7 @@ class CollectionSupport extends Model
 
 	public function support()
 	{
-		return $this->belongsTo(Support::class);
+		return $this->belongsTo(Support::class,'support_id');
 	}
 
 	public function user()

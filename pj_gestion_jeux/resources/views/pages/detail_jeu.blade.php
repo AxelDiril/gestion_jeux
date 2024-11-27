@@ -24,6 +24,9 @@
         <p>Moyenne : {{$objGame->rating}}</p>
         <p>Description : {{ $objGame->game_desc }}</p>
     @endif
+    @if (auth()->check())
+        <a href="/ajout_jeu?game_id={{ $iGameId }}">Ajouter à la collection</a>
+    @endif
     <a href="/liste_jeux">Retour à la liste des jeux</a>
 @stop
 

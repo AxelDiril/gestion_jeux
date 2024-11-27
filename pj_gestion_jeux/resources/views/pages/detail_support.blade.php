@@ -15,6 +15,9 @@
         <p>Date de sortie : {{ $objSupport->support_year}}</p>
         <p>Description : {{ $objSupport->support_desc }}</p>
     @endif
+    @if (auth()->check())
+        <a href="/ajout_support?support_id={{ $iSupportId }}">Ajouter à la collection</a>
+    @endif
     <a href="/liste_supports">Retour à la liste des supports</a>
 @stop
 

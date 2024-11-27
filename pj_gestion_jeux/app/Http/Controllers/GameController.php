@@ -48,7 +48,7 @@ class GameController extends Controller
             $arGames->whereYear('game_year',$iGameYear);
         }
 
-        $arGames = $arGames->get();
+        $arGames = $arGames->distinct('game_id')->get();
         $arSupports = Support::orderBy('support_name','asc')->get();
         $arGenres = Genre::orderBy('genre_label','asc')->get();
         $arYears = Game::select('game_year')->distinct()->orderBy('game_year','desc')->get();
