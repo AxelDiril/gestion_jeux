@@ -35,4 +35,39 @@ class CollectionSupportController extends Controller
 
         return view('pages/message',compact("iSupportId","strMessage","strLink","strLinkMessage"));
     }
+
+    public function collection_supports(Request $request){
+
+        // Récupération des filtres avec Request
+        $iId = $request->query('id');
+        $iSupportYear = $request->query('support_year');
+        $strOrder = $request->query('order');
+        $strDirection = $request->query('direction');
+        $strSupportName = $request->query('game_name');
+
+        // Construction de la requête pour l'appel des jeux
+        $arCollectionSupports = CollectionSupport::query()
+        ->join('supports',"supports.support_id","=","collection_supports.support_id")
+        ->where('id',$iId);
+
+        // Ordonner la requête
+        if(!empty($strOrder) && !empty($strDirection)){
+            $arCollectionSupports = $arCollectionSupports->orderBy($strOrder,$strDirection);
+        }
+
+        // Filtres
+        if(!empty($strSupportName) && $strSupportName != "all"){
+            $arCollectionSupports->where('support_name','LIKE','%'.$strSupportName.'%');
+        }
+
+        if(!empty($iSupportYear) && $iSupportYear != "all"){
+            $arCollectionSupports->where('support_year',$iSupportYear);
+        }
+
+        $arCollectionSupports = $arCollectionSupports->get();
+        $arYears = Support::select('support_year')->distinct()->orderBy('support_year','desc')->get();
+
+        // Envoie les supports
+        return view('pages/profil_collection_supports', compact('arCollectionSupports', 'arYears', 'iSupportYear','strSupportName',));
+    }
 }

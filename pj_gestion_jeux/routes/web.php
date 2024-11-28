@@ -14,6 +14,7 @@ Route::get('/liste_supports', [SupportController::class, 'liste_supports']);
 Route::get('/detail_support', [SupportController::class, 'detail_support']);
 Route::get('/ajout_jeu', [CollectionGameController::class, 'add_to_collection']);
 Route::get('/ajout_support', [CollectionSupportController::class, 'add_to_collection']);
+Route::get('/profil_collection_supports', [CollectionSupportController::class, 'collection_supports']);
 Route::get('/profil', [UserController::class, 'show_profile']);
 
 Route::get('/', function () {

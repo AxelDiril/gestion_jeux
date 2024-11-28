@@ -28,11 +28,11 @@ class SupportController extends Controller
         }
 
         if(!empty($iSupportYear) && $iSupportYear != "all"){
-            $arSupports->whereYear('support_year',$iSupportYear);
+            $arSupports->where('support_year',$iSupportYear);
         }
 
         $arSupports = $arSupports->get();
-        $arYears = Support::select('support_year')->distinct()->orderBy('support_year','desc')->get();
+        $arYears = Support::select('support_year')->orderBy('support_year','desc')->get();
 
         // Envoie les jeux, les supports et all les années
         return view('pages/liste_supports', compact('arSupports', 'arYears', 'strSupportName', 'iSupportYear'));

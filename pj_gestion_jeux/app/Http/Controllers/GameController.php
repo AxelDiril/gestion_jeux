@@ -10,53 +10,53 @@ use App\Models\AppartientGenre;
 
 class GameController extends Controller
 {
-    public function liste_jeux(Request $request){
-
-        // Récupération des filtres avec Request
+    public function liste_jeux(Request $request)
+    {
+        // Retrieve filters
         $iSupportId = $request->query('support_id');
         $iGameYear = $request->query('game_year');
-        $strOrder = $request->query('order');
-        $strDirection = $request->query('direction');
+        $strOrder = $request->query('order', 'game_name'); // Default to 'game_name' if no order provided
+        $strDirection = $request->query('direction', 'asc'); // Default to ascending if no direction provided
         $strGameName = $request->query('game_name');
         $iGenreId = $request->query('genre_id');
-
-        // Construction de la requête pour l'appel des jeux
+    
+        // Start building the query
         $arGames = Game::query();
-
-        // Jointure avec GJ_appartient_genres
-        $arGames = $arGames->join('game_genres',"games.game_id", "=", "game_genres.game_id");
-
-        // Ordonner la requête
-        if(!empty($strOrder) && !empty($strDirection)){
-            $arGames = $arGames->orderBy($strOrder,$strDirection);
+    
+        // Add filters
+        if (!empty($strGameName) && $strGameName != "all") {
+            $arGames->where('game_name', 'LIKE', '%' . $strGameName . '%');
         }
-
-        // Filtres
-        if(!empty($strGameName) && $strGameName != "all"){
-            $arGames->where('game_name','LIKE','%'.$strGameName.'%');
+    
+        if (!empty($iSupportId) && $iSupportId != "all") {
+            $arGames->where('support_id', $iSupportId);
         }
-
-        if(!empty($iSupportId) && $iSupportId != "all"){
-            $arGames->where('support_id',$iSupportId);
+    
+        if (!empty($iGameYear) && $iGameYear != "all") {
+            $arGames->where('game_year', $iGameYear);
         }
-
-        if(!empty($iGenreId) && $iGenreId != "all"){
-            $arGames->where('genre_id',$iGenreId);
+    
+        if (!empty($iGenreId) && $iGenreId != "all") {
+            $arGames->whereHas('genres', function ($query) use ($iGenreId) {
+                $query->where('genre_id', $iGenreId);
+            });
         }
-
-        if(!empty($iGameYear) && $iGameYear != "all"){
-            $arGames->whereYear('game_year',$iGameYear);
-        }
-
-        $arGames = $arGames->distinct('game_id')->get();
-        $arSupports = Support::orderBy('support_name','asc')->get();
-        $arGenres = Genre::orderBy('genre_label','asc')->get();
-        $arYears = Game::select('game_year')->distinct()->orderBy('game_year','desc')->get();
-
-        // Envoie les jeux, les supports et all les années
-        return view('pages/liste_jeux', compact('arGames', 'arSupports', 'arYears', "arGenres", 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId'));
+    
+        // Add ordering
+        $arGames->orderBy($strOrder, $strDirection);
+    
+        // Get the results
+        $arGames = $arGames->get();
+    
+        // Retrieve supports, genres, and years
+        $arSupports = Support::orderBy('support_name', 'asc')->get();
+        $arGenres = Genre::orderBy('genre_label', 'asc')->get();
+        $arYears = Game::select('game_year')->distinct()->orderBy('game_year', 'desc')->get();
+    
+        // Send to the view
+        return view('pages/liste_jeux', compact('arGames', 'arSupports', 'arYears', 'arGenres', 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId'));
     }
-
+    
     public function detail_jeu(Request $request){
 
         $iGameId = $request->query('game_id');
