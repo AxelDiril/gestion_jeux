@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Progression extends Model
 {
-	protected $table = 'GJ_progression';
+	//protected $table = 'GJ_progressions';
 	protected $primaryKey = 'progress_id';
 	public $timestamps = false;
 

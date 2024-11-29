@@ -55,13 +55,14 @@
     @if($arCollectionGames->isEmpty())
         <p>Aucun résultat ne correspond à votre requête</p>
     @else
-        <!-- Liste des jeux dans GJ_Games -->
+        <!-- Liste des jeux dans GJ_collection_games -->
         <div class="game_grid">
             @foreach($arCollectionGames as $keyGame)
             <div class="game_item">
                     <a href="/detail_jeu?game_id={{ $keyGame->game_id }}">{{ $keyGame->game_name }}</a>
                     <p>{{ $keyGame->game_year }}</p>
                     <p>{{ $keyGame->game->support->support_name }}</p>
+                    <a href="/edit_collection_jeu?game_id={{ $keyGame->game_id }}&id={{ $iId }}">Editer</a>
             </div>
             @endforeach
         </div>

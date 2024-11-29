@@ -17,6 +17,8 @@ Route::get('/ajout_support', [CollectionSupportController::class, 'add_to_collec
 Route::get('/profil_collection_supports', [CollectionSupportController::class, 'collection_supports']);
 Route::get('/profil_collection_jeux', [CollectionGameController::class, 'collection_jeux']);
 Route::get('/profil', [UserController::class, 'show_profile']);
+Route::get('/edit_collection_jeu', [CollectionGameController::class, 'edit_collection_jeu']);
+Route::put('/update_collection_jeu', [CollectionGameController::class, 'update_collection_jeu']);
 
 Route::get('/', function () {
     return view('welcome');

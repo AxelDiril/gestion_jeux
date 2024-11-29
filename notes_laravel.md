@@ -18,6 +18,7 @@
 
 * Remettre le `.env`` / en compléter un nouveau
 * Reconstruire le fichier Vendor avec `composer install` dans un terminal à la racine du dossier
+* Pour installer les fichiers pour faire fonctionner Breeze, écrire  `npm install` et `npm run build`.
 
 ## Créer une nouvelle page
 
