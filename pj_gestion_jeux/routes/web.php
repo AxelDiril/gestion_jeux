@@ -19,6 +19,10 @@ Route::get('/profil_collection_jeux', [CollectionGameController::class, 'collect
 Route::get('/profil', [UserController::class, 'show_profile']);
 Route::get('/edit_collection_jeu', [CollectionGameController::class, 'edit_collection_jeu']);
 Route::put('/update_collection_jeu', [CollectionGameController::class, 'update_collection_jeu']);
+Route::get('/liste_utilisateurs', [UserController::class, 'liste_utilisateurs']);
+Route::get('/edit_utilisateur/{id}', [UserController::class, 'edit_utilisateur']);
+Route::put('/update_utilisateur/{id}', [UserController::class, 'update_utilisateur']);
+
 
 Route::get('/', function () {
     return view('welcome');
