@@ -10,20 +10,25 @@ use App\Models\AppartientGenre;
 
 class GameController extends Controller
 {
+    // Récupère tous les jeux de GJ_games
+    // Les jeux qui seront affichés dépendent des filtres saisis par l'utilisateur dans $request
     public function liste_jeux(Request $request)
     {
-        // Retrieve filters
+        // Récupérer les filtres passés dans $request
         $iSupportId = $request->query('support_id');
         $iGameYear = $request->query('game_year');
-        $strOrder = $request->query('order', 'game_name'); // Default to 'game_name' if no order provided
-        $strDirection = $request->query('direction', 'asc'); // Default to ascending if no direction provided
+        $strOrder = $request->query('order', 'game_name');
+        $strDirection = $request->query('direction', 'asc');
         $strGameName = $request->query('game_name');
         $iGenreId = $request->query('genre_id');
     
-        // Start building the query
+        // Construction de la requête
         $arGames = Game::query();
     
-        // Add filters
+        // Ordre des jeux
+        $arGames->orderBy($strOrder, $strDirection);
+
+        // Filtres optionnels : les conditions s'additionnent si plusieurs filtres sont choisis
         if (!empty($strGameName) && $strGameName != "all") {
             $arGames->where('game_name', 'LIKE', '%' . $strGameName . '%');
         }
@@ -42,36 +47,23 @@ class GameController extends Controller
             });
         }
     
-        // Add ordering
-        $arGames->orderBy($strOrder, $strDirection);
-    
-        // Get the results
         $arGames = $arGames->get();
     
-        // Retrieve supports, genres, and years
+        // Récupère tous les supports, genres et les années de sortie pour les filtres
         $arSupports = Support::orderBy('support_name', 'asc')->get();
         $arGenres = Genre::orderBy('genre_label', 'asc')->get();
         $arYears = Game::select('game_year')->distinct()->orderBy('game_year', 'desc')->get();
     
-        // Send to the view
         return view('pages/liste_jeux', compact('arGames', 'arSupports', 'arYears', 'arGenres', 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId'));
     }
     
-    public function detail_jeu(Request $request){
+    // Récupère toutes les informations d'un jeu choisi depuis liste_jeux ou profil_collection_jeux
+    // A partir du game_id passé en paramètres
+    public function detail_jeu($game_id){
 
-        $iGameId = $request->query('game_id');
+        // Requête pour l'appel du jeu à détailler
+        $objGame = Game::find($game_id);
 
-        // Construction de la requête pour l'appel du jeu à détailler
-        $objGame = Game::query();
-
-        if(!empty($iGameId)){
-            $objGame->where('game_id',$iGameId);
-        }
-
-        //Obtenir l'unique jeu
-        $objGame = $objGame->first();
-
-        // Charge la page avec les détails du jeu concerné
-        return view('pages/detail_jeu', compact('objGame', 'iGameId'));
+        return view('pages/detail_jeu', compact('objGame'));
     }
 }

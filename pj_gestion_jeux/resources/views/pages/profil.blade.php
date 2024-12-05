@@ -26,6 +26,8 @@
         @endforeach
     </div>
 
+    <a href="/profil_collection_jeux/id={{ $objUser->id }}">Voir tous les jeux</a>
+
     <h2>Derniers supports de la collection</h2>
 
     <div class="game_grid">
@@ -36,4 +38,6 @@
         </div>
         @endforeach
     </div>
+
+    <a href="/profil_collection_supports/id={{ $objUser->id }}">Voir tous les supports</a>
 @stop

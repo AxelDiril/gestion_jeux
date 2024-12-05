@@ -6,89 +6,105 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CollectionGame;
 use App\Models\CollectionSupport;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function show_profile(Request $request){
+    // Récupère toutes les informations à afficher sur le profil
+    // De l'utilisateur envoyé en paramètre
+    public function profil($id){
 
-        // Récupération des filtres avec Request
-        $iId = $request->query('id');
+        // Récupération de l'id de l'utilisateur passé en paramètres
 
-        $objUser = User::query()->where('id',$iId)->first();
+        $objUser = User::find($id);
 
-        $arLatestGames = CollectionGame::query()->where('id',$iId)->orderBy('added_at')->limit(5)->get();
-        $arLatestSupports = CollectionSupport::query()->where('id',$iId)->orderBy('added_at')->limit(5)->get();
-        $iTotalGames = CollectionGame::query()->where('id',$iId)->distinct('game_id')->count('game_id');
-        $iTotalSupports = CollectionSUpport::query()->where('id',$iId)->distinct('support_id')->count('support_id');
+        // Ne pas accéder au profil si il a une visibilité privée
+        if ($objUser->visibilite == false) {
+            // Rediriger l'utilisateur vers l'accueil
+            return redirect('/');
+        }
+
+        // Statistiques du profil
+        // Les cinq derniers jeux et supports ajoutés dans la collection
+        $arLatestGames = CollectionGame::query()->where('id',$id)->orderBy('added_at')->limit(5)->get();
+        $arLatestSupports = CollectionSupport::query()->where('id',$id)->orderBy('added_at')->limit(5)->get();
+        
+        // Total des jeux et supports possédés
+        $iTotalGames = CollectionGame::query()->where('id',$id)->distinct('game_id')->count('game_id');
+        $iTotalSupports = CollectionSUpport::query()->where('id',$id)->distinct('support_id')->count('support_id');
 
         return view('pages/profil', compact('objUser', 'iTotalGames', 'iTotalSupports', 'arLatestGames', 'arLatestSupports'));
     }
 
+    // Retourne la liste de tous les utilisateurs et leurs informations
+    // Les utilisateurs qui seront affichés dépendent des filtres saisis par l'utilisateur dans $request
     public function liste_utilisateurs(Request $request)
     {
-        // Récupération des filtres de la requête
+        // Réserver l'accès aux validateurs et à l'administrateur (role_code V ou A)
+        $objUser = Auth::user();
+
+        if ($objUser == false || $objUser->code == "U") {
+            // Rediriger l'utilisateur vers l'accueil
+            return redirect('/');
+        }
+
+        // Récupérer les filtres passés dans $request
         $strName = $request->query('name');
         $strOrder = $request->query('order');
         $strDirection = $request->query('direction');
         $visibilite = $request->query('visibilite');
         $code = $request->query('code');
 
-        // Construction de la requête pour obtenir les utilisateurs
+        // Construction de la requête
         $arUsers = User::query();
 
-        // Filtrage par nom
+        // Filtres
         if (!empty($strName)) {
             $arUsers->where('name', 'LIKE', '%' . $strName . '%');
         }
 
-        // Filtrage par visibilité
+        // Filtres optionnels : les conditions s'additionnent si plusieurs filtres sont choisis
         if (!is_null($visibilite)) {
             $arUsers->where('visibilite', $visibilite);
         }
 
-        // Filtrage par code
         if (!empty($code)) {
             $arUsers->where('code', $code);
         }
 
-        // Tri
         if (!empty($strOrder) && !empty($strDirection)) {
             $arUsers->orderBy($strOrder, $strDirection);
         }
 
-        // Récupération des utilisateurs avec les filtres appliqués
         $arUsers = $arUsers->get();
 
         return view('pages/liste_utilisateurs', compact('arUsers', 'strName', 'strOrder', 'strDirection', 'visibilite', 'code'));
     }
 
+    // Retourne la vue edit_utilisateur qui permet de changer le rôle
+    // Et le droit de faire des requête de l'utilisateur passé en paramètres
     public function edit_utilisateur($id)
     {
         // Récupérer l'utilisateur par son ID
-        $user = User::findOrFail($id);
+        $objUser = User::find($id);
 
-        // Passer les données à la vue
-        return view('pages/edit_utilisateur', compact('user'));
+        return view('pages/edit_utilisateur', compact('objUser'));
     }
 
+    // Met à jour le rôle et le droit de contribuer de l'utilisateur
+    // Passé en paramètress
     public function update_utilisateur(Request $request, $id)
     {
-        // Validation des données
-        $request->validate([
-            'code' => 'required|in:A,V,U', // Le code peut être A, V, ou U
-            'can_contribute' => 'required|boolean', // can_contribute doit être un booléen
-        ]);
-
         // Récupérer l'utilisateur par son ID
-        $user = User::findOrFail($id);
+        $objUser = User::find($id);
 
         // Mettre à jour les informations
-        $user->update([
+        $objUser->update([
             'code' => $request->input('code'),
             'can_contribute' => $request->input('can_contribute'),
         ]);
 
-        // Message et redirection
+        // Message personnalisé pour la vue message
         $strMessage = "Les informations de l'utilisateur ont bien été mises à jour.";
         $strLink = "/liste_utilisateurs"; // Redirection vers la liste des utilisateurs
         $strLinkMessage = "Retour à la liste des utilisateurs";

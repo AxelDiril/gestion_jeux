@@ -58,9 +58,9 @@
         <div class="game_grid">
             @foreach($arGames as $keyGame)
             <div class="game_item">
-                    <a href="/detail_jeu?game_id={{ $keyGame->game_id }}">{{ $keyGame->game_name }}</a>
-                    <p>{{ $keyGame->game_year }}</p>
-                    <p>{{ $keyGame->support->support_name }}</p>
+                <a href="/detail_jeu/{{ $keyGame->game_id }}">{{ $keyGame->game_name }}</a>
+                <p>{{ $keyGame->game_year }}</p>
+                <p>{{ $keyGame->support->support_name }}</p>
             </div>
             @endforeach
         </div>

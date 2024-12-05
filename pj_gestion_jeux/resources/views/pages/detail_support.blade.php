@@ -1,22 +1,24 @@
 @extends('layouts/structure')
 
 @section('titre')
-    {{ $iSupportId != null && isset($objSupport) ? $objSupport->support_name : 'Erreur' }}
+    {{ $objSupport->support_name }}
 @stop
 
-@section('css', asset('styles/liste_jeux.css'))
-
 @section('contenu')
-    @if($iSupportId == null || isset($objSupport) == false)
-        <p>Aucun support n'a été sélectionné</p>
-    @else
-        <h1>{{ $objSupport->support_name }}</h1>
 
-        <p>Date de sortie : {{ $objSupport->support_year}}</p>
-        <p>Description : {{ $objSupport->support_desc }}</p>
-    @endif
+    <h1>{{ $objSupport->support_name }}</h1>
+
+    <p>Date de sortie : {{ $objSupport->support_year}}</p>
+    <p>Description : {{ $objSupport->support_desc }}</p>
+    <p>Possédé par :
+        @if(($objSupport->owned_by) > 0)
+            {{ $objSupport->owned_by }} utilisateurs
+        @else
+            Personne
+        @endif
+    </p>
     @if (auth()->check())
-        <a href="/ajout_support?support_id={{ $iSupportId }}">Ajouter à la collection</a>
+        <a href="/ajout_support?support_id={{ $objSupport->support_id }}">Ajouter à la collection</a>
     @endif
     <a href="/liste_supports">Retour à la liste des supports</a>
 @stop

@@ -39,7 +39,7 @@
         <div class="game_grid">
             @foreach($arCollectionSupports as $keySupport)
             <div class="game_item">
-                <a href="/detail_support?support_id={{ $keySupport->support_id }}">{{ $keySupport->support->support_name }}</a>
+                <a href="/detail_support/{{ $keySupport->support_id }}">{{ $keySupport->support->support_name }}</a>
                 <p>{{ $keySupport->support->support_year }}</p>
             </div>
             @endforeach

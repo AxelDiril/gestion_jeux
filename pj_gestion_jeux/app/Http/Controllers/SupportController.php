@@ -7,22 +7,25 @@ use App\Models\Support;
 
 class SupportController extends Controller
 {
-    public function liste_supports(Request $request){
-
+    // Récupère tous les jeux de GJ_supports
+    // Mes supports qui seront affichés dépendent des filtres saisis par l'utilisateur dans $request
+    public function liste_supports(Request $request)
+    {
+        // Récupérer les filtres
         $strSupportName = $request->query('support_name');
         $iSupportYear = $request->query('support_year');
         $strOrder = $request->query('order');
         $strDirection = $request->query('direction');
 
-        // Construction de la requête pour l'appel des jeux
+        // Construction de la requête
         $arSupports = Support::query();
 
-        // Ordonner la requête
+        // Ordonner des supports
         if(!empty($strOrder) && !empty($strDirection)){
             $arSupports = $arSupports->orderBy($strOrder,$strDirection);
         }
 
-        // Filtres
+        // Filtres optionnels : les conditions s'additionnent si plusieurs filtres sont choisis
         if(!empty($strSupportName) && $strSupportName != "all"){
             $arSupports->where('support_name','LIKE','%'.$strSupportName.'%');
         }
@@ -32,25 +35,22 @@ class SupportController extends Controller
         }
 
         $arSupports = $arSupports->get();
+
+        // Récupérer les années pour les filtres
         $arYears = Support::select('support_year')->orderBy('support_year','desc')->get();
 
-        // Envoie les jeux, les supports et all les années
         return view('pages/liste_supports', compact('arSupports', 'arYears', 'strSupportName', 'iSupportYear'));
     }
 
-    public function detail_support(Request $request)
+    // Récupère toutes les informations d'un support choisi depuis liste_supports ou profil_collection_supports
+    // A partir du support_id passé en paramètres
+    public function detail_support($support_id)
     {
-        $iSupportId = $request->query('support_id');
 
-        $objSupport = Support::query();
+        // Requête pour l'appel du support à détailler
+        $objSupport = Support::find($support_id);
 
-        if (!empty($iSupportId)) {
-            $objSupport->where('support_id', $iSupportId);
-        }
-
-        $objSupport = $objSupport->first();
-
-        return view('pages/detail_support', compact('objSupport', 'iSupportId'));
+        return view('pages/detail_support', compact('objSupport'));
     }
 
 }

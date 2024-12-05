@@ -62,7 +62,7 @@
                     <a href="/detail_jeu?game_id={{ $keyGame->game_id }}">{{ $keyGame->game_name }}</a>
                     <p>{{ $keyGame->game_year }}</p>
                     <p>{{ $keyGame->game->support->support_name }}</p>
-                    <a href="/edit_collection_jeu?game_id={{ $keyGame->game_id }}&id={{ $iId }}">Editer</a>
+                    <a href="/edit_collection_jeu/{{ $keyGame->game_id }}/{{ $id }}">Editer</a>
             </div>
             @endforeach
         </div>

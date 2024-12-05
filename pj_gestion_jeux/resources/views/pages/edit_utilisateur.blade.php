@@ -4,13 +4,11 @@
     Édition de l'utilisateur
 @stop
 
-@section('css', asset('styles/edition_utilisateur.css'))
-
 @section('contenu')
-    <h1>Édition de l'utilisateur : {{ $user->name }}</h1>
+    <h1>Édition de l'utilisateur : {{ $objUser->name }}</h1>
 
     <!-- Formulaire d'édition -->
-    <form method="POST" action="/update_utilisateur/{{ $user->id }}">
+    <form method="POST" action="/update_utilisateur/{{ $objUser->id }}">
         @csrf
         @method('PUT')
 
@@ -18,9 +16,9 @@
         <div>
             <label for="code">Code</label>
             <select name="code" id="code">
-                <option value="A" {{ $user->code == 'A' ? 'selected' : '' }}>A</option>
-                <option value="V" {{ $user->code == 'V' ? 'selected' : '' }}>V</option>
-                <option value="U" {{ $user->code == 'U' ? 'selected' : '' }}>U</option>
+                <option value="A" {{ $objUser->code == 'A' ? 'selected' : '' }}>A</option>
+                <option value="V" {{ $objUser->code == 'V' ? 'selected' : '' }}>V</option>
+                <option value="U" {{ $objUser->code == 'U' ? 'selected' : '' }}>U</option>
             </select>
         </div>
 
@@ -28,8 +26,8 @@
         <div>
             <label for="can_contribute">Peut contribuer</label>
             <select name="can_contribute" id="can_contribute">
-                <option value="1" {{ $user->can_contribute == 1 ? 'selected' : '' }}>Oui</option>
-                <option value="0" {{ $user->can_contribute == 0 ? 'selected' : '' }}>Non</option>
+                <option value="1" {{ $objUser->can_contribute == 1 ? 'selected' : '' }}>Oui</option>
+                <option value="0" {{ $objUser->can_contribute == 0 ? 'selected' : '' }}>Non</option>
             </select>
         </div>
 
