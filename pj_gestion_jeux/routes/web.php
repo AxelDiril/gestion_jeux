@@ -22,6 +22,7 @@ Route::put('/update_collection_jeu/{game_id}/{id}', [CollectionGameController::c
 Route::get('/edit_collection_support/{support_id}/{id}', [CollectionSupportController::class, 'edit_collection_support']);
 Route::put('/update_collection_support/{support_id}/{id}', [CollectionSupportController::class, 'update_collection_support']);
 Route::get('/liste_utilisateurs', [UserController::class, 'liste_utilisateurs']);
+Route::get('/liste_utilisateurs_admin', [UserController::class, 'liste_utilisateurs_admin']);
 Route::get('/edit_utilisateur/{id}', [UserController::class, 'edit_utilisateur']);
 Route::put('/update_utilisateur/{id}', [UserController::class, 'update_utilisateur']);
 

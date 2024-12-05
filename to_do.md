@@ -12,5 +12,3 @@
 * Rajouter owned_by pour SUPPORT dans MCD
 * Expliquer find() et whereHas()
 * Faire la recherche d'utilisateurs (hors administration)
-* Faire une page d'accueil
-* Update commentaire SUPPORT

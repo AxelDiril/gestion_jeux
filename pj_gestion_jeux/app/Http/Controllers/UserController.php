@@ -38,7 +38,7 @@ class UserController extends Controller
 
     // Retourne la liste de tous les utilisateurs et leurs informations
     // Les utilisateurs qui seront affichés dépendent des filtres saisis par l'utilisateur dans $request
-    public function liste_utilisateurs(Request $request)
+    public function liste_utilisateurs_admin(Request $request)
     {
         // Réserver l'accès aux validateurs et à l'administrateur (role_code V ou A)
         $objUser = Auth::user();
@@ -78,7 +78,34 @@ class UserController extends Controller
 
         $arUsers = $arUsers->get();
 
-        return view('pages/liste_utilisateurs', compact('arUsers', 'strName', 'strOrder', 'strDirection', 'visibilite', 'code'));
+        return view('pages/liste_utilisateurs_admin', compact('arUsers', 'strName', 'strOrder', 'strDirection', 'visibilite', 'code'));
+    }
+
+    // Retourne la liste de tous les utilisateurs et leurs informations
+    // Les utilisateurs qui seront affichés dépendent des filtres saisis par l'utilisateur dans $request
+    public function liste_utilisateurs(Request $request)
+    {
+        // Récupérer les filtres passés dans $request
+        $strName = $request->query('name');
+        $strOrder = $request->query('order');
+        $strDirection = $request->query('direction');
+
+        // Construction de la requête
+        $arUsers = User::query()
+        ->where('visibilite','1');
+
+        // Filtres
+        if (!empty($strName)) {
+            $arUsers->where('name', 'LIKE', '%' . $strName . '%');
+        }
+
+        if (!empty($strOrder) && !empty($strDirection)) {
+            $arUsers->orderBy($strOrder, $strDirection);
+        }
+
+        $arUsers = $arUsers->get();
+
+        return view('pages/liste_utilisateurs', compact('arUsers', 'strName', 'strOrder', 'strDirection'));
     }
 
     // Retourne la vue edit_utilisateur qui permet de changer le rôle
@@ -106,7 +133,7 @@ class UserController extends Controller
 
         // Message personnalisé pour la vue message
         $strMessage = "Les informations de l'utilisateur ont bien été mises à jour.";
-        $strLink = "/liste_utilisateurs"; // Redirection vers la liste des utilisateurs
+        $strLink = "/liste_utilisateurs_admin"; // Redirection vers la liste des utilisateurs
         $strLinkMessage = "Retour à la liste des utilisateurs";
 
         return view('pages/message', compact("strMessage", "strLink", "strLinkMessage"));
