@@ -19,6 +19,8 @@ Route::get('/profil_collection_jeux/{id}', [CollectionGameController::class, 'co
 Route::get('/profil/{id}', [UserController::class, 'profil']);
 Route::get('/edit_collection_jeu/{game_id}/{id}', [CollectionGameController::class, 'edit_collection_jeu']);
 Route::put('/update_collection_jeu/{game_id}/{id}', [CollectionGameController::class, 'update_collection_jeu']);
+Route::get('/edit_collection_support/{support_id}/{id}', [CollectionSupportController::class, 'edit_collection_support']);
+Route::put('/update_collection_support/{support_id}/{id}', [CollectionSupportController::class, 'update_collection_support']);
 Route::get('/liste_utilisateurs', [UserController::class, 'liste_utilisateurs']);
 Route::get('/edit_utilisateur/{id}', [UserController::class, 'edit_utilisateur']);
 Route::put('/update_utilisateur/{id}', [UserController::class, 'update_utilisateur']);

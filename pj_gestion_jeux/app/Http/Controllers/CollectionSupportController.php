@@ -85,6 +85,62 @@ class CollectionSupportController extends Controller
         // Récupérer les années pour les filtres
         $arYears = Support::select('support_year')->distinct()->orderBy('support_year','desc')->get();
 
-        return view('pages/profil_collection_supports', compact('arCollectionSupports', 'arYears', 'iSupportYear','strSupportName'));
+        return view('pages/profil_collection_supports', compact('arCollectionSupports', 'arYears', 'iSupportYear','strSupportName','id'));
     }
+
+    // Editer le commentaire d'un support dans edit_collection_support
+    public function edit_collection_support($supportId, $id)
+    {
+        // Vérifier si le support existe dans la collection de l'utilisateur
+        $objCollectionSupport = CollectionSupport::where('support_id', $supportId)
+                                                ->where('id', $id)
+                                                ->first();
+
+        // Si le support n'existe pas dans la collection, rediriger avec un message d'erreur
+        if (!$objCollectionSupport) {
+            $strMessage = "Ce support n'est pas dans votre collection.";
+            $strLink = "/profil_collection_supports/" . $id;  // Rediriger vers la page de collection des supports
+            $strLinkMessage = "Retour à ma collection de supports";
+            return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
+        }
+
+        // Retourner la vue d'édition du commentaire
+        return view('pages/edit_collection_support', compact('objCollectionSupport'));
+    }
+
+    // Mettre à jour le commentaire d'un support dans la collection
+    public function update_collection_support(Request $request, $supportId, $id)
+    {
+        // Vérifier si le couple support-utilisateur existe
+        $objCollectionSupport = CollectionSupport::where('support_id', $supportId)
+                                                ->where('id', $id)
+                                                ->first();
+
+        // Si le couple support-utilisateur n'existe pas, rediriger avec un message d'erreur
+        if (!$objCollectionSupport) {
+            $strMessage = "Ce support n'existe pas dans votre collection.";
+            $strLink = "/profil_collection_supports/{$id}";  // Lien vers la collection de l'utilisateur
+            $strLinkMessage = "Retour à ma collection de supports";
+
+            return view('pages.message', compact('strMessage', 'strLink', 'strLinkMessage'));
+        }
+
+        // Validation du commentaire
+        $request->validate([
+            'comment' => 'nullable|string|max:255',
+        ]);
+
+        // Mettre à jour le commentaire du support
+        $objCollectionSupport->comment = $request->comment;
+        $objCollectionSupport->save();
+
+        // Variables pour la vue du message
+        $strMessage = "Le commentaire du support a été mis à jour avec succès.";
+        $strLink = "/profil_collection_supports/{$id}";  // Lien vers la collection de l'utilisateur
+        $strLinkMessage = "Retour à ma collection de supports";
+
+        return view('pages.message', compact('strMessage', 'strLink', 'strLinkMessage'));
+    }
+
+
 }
