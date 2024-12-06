@@ -68,7 +68,8 @@
                     <td>{{ $user->can_contribute ? 'Oui' : 'Non' }}</td> <!-- Nouvelle colonne "Peut Contribuer" -->
                     <td>
                         <!-- Lien vers la page d'édition -->
-                        <a href="{{ url('edit_utilisateur/' . $user->id) }}">Modifier</a>
+                        <a href="edit_utilisateur/{{ $user->id }}">Modifier</a>
+                        <a href="delete_utilisateur/{{ $user->id }}">Exclure</a>
                     </td>
                 </tr>
                 @endforeach

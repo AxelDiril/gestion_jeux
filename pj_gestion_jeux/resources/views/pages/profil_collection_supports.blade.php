@@ -42,6 +42,7 @@
                 <a href="/detail_support/{{ $keySupport->support_id }}">{{ $keySupport->support->support_name }}</a>
                 <p>{{ $keySupport->support->support_year }}</p>
                 <a href="/edit_collection_support/{{ $keySupport->support_id }}/{{ $id }}">Editer</a>
+                <a href="/delete_collection_support/{{ $keySupport->support_id }}">Retirer</a>
             </div>
             @endforeach
         </div>

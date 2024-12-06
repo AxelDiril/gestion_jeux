@@ -17,11 +17,15 @@ class UserController extends Controller
         // Récupération de l'id de l'utilisateur passé en paramètres
 
         $objUser = User::find($id);
+        $objAuthUser = Auth::user();
 
         // Ne pas accéder au profil si il a une visibilité privée
         if ($objUser->visibilite == false) {
-            // Rediriger l'utilisateur vers l'accueil
-            return redirect('/');
+            // Sauf si c'est l'utilisateur lui-même ou un administrateur
+            if ($objAuthUser == false || $objAuthUser->id !=  $id || $objAuthUser->code != "A") {
+                // Rediriger l'utilisateur vers l'accueil
+                return redirect('/');
+            }
         }
 
         // Statistiques du profil
@@ -135,6 +139,58 @@ class UserController extends Controller
         $strMessage = "Les informations de l'utilisateur ont bien été mises à jour.";
         $strLink = "/liste_utilisateurs_admin"; // Redirection vers la liste des utilisateurs
         $strLinkMessage = "Retour à la liste des utilisateurs";
+
+        return view('pages/message', compact("strMessage", "strLink", "strLinkMessage"));
+    }
+
+    // Met à jour la visibilité du profil de l'utilisateur
+    public function change_visibilite($id){
+        $objUser = User::where('id', $id)->first();
+
+        if($objUser->visibilite == 0){
+            $objUser->visibilite = 1;
+        }
+        else{
+            $objUser->visibilite = 0;
+        }
+        $objUser->save();
+        
+        // Message personnalisé pour la vue message
+        $strMessage = "La visibilité de votre profil a bien été mise à jour.";
+        $strLink = "/profil/{$id}"; // Redirection vers le profil de l'utilisateur
+        $strLinkMessage = "Retour à votre profil";
+
+        return view('/pages/message',compact('strMessage','strLink','strLinkMessage'));
+    }
+
+    // Supprime un utilisateur passé en paramètre
+    public function delete_utilisateur($id)
+    {
+        // Vérifier si l'utilisateur est administrateur
+        $objAuthUser = Auth::user();
+        if ($objAuthUser == false || $objAuthUser->code != 'A') {
+            // Rediriger vers l'accueil si l'utilisateur n'est pas administrateur
+            return redirect('/');
+        }
+
+        // Récupérer l'utilisateur par son ID
+        $objUser = User::find($id);
+
+        // Vérifier si l'utilisateur existe
+        if (!$objUser) {
+            $strMessage = "Cet utilisateur n'existe pas.";
+            $strLink = "/liste_utilisateurs_admin"; // Redirection vers le profil de l'utilisateur
+            $strLinkMessage = "Retour à la liste des utilisateurs";
+        }
+        else{
+            // Supprimer l'utilisateur
+            $objUser->delete();
+
+            // Message personnalisé pour la vue message
+            $strMessage = "L'utilisateur a bien été supprimé.";
+            $strLink = "/liste_utilisateurs_admin"; // Redirection vers la liste des utilisateurs
+            $strLinkMessage = "Retour à la liste des utilisateurs";
+        }
 
         return view('pages/message', compact("strMessage", "strLink", "strLinkMessage"));
     }

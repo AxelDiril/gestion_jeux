@@ -40,7 +40,7 @@
             <tbody>
                 @foreach($arUsers as $user)
                 <tr>
-                    <td><a href="url('profil/' . $user->id)">{{ $user->name }}</a></td>
+                    <td><a href="/profil/{{ $user->id }}/">{{ $user->name }}</a></td>
                     <td>{{ $user->created_at->format('d/m/Y') }}</td>
                 </tr>
                 @endforeach

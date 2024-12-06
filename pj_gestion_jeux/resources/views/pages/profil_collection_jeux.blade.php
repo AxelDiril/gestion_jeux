@@ -59,10 +59,14 @@
         <div class="game_grid">
             @foreach($arCollectionGames as $keyGame)
             <div class="game_item">
-                    <a href="/detail_jeu?game_id={{ $keyGame->game_id }}">{{ $keyGame->game_name }}</a>
+                    <a href="/detail_jeu/{{ $keyGame->game_id }}">{{ $keyGame->game_name }}</a>
                     <p>{{ $keyGame->game_year }}</p>
                     <p>{{ $keyGame->game->support->support_name }}</p>
+                    @if ($keyGame->note)
+                        <p>{{ $keyGame->note }}/10</p>
+                    @endif
                     <a href="/edit_collection_jeu/{{ $keyGame->game_id }}/{{ $id }}">Editer</a>
+                    <a href="/delete_collection_jeu/{{ $keyGame->game_id }}">Retirer</a>
             </div>
             @endforeach
         </div>

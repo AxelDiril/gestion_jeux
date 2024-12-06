@@ -18,16 +18,16 @@ class CollectionSupportController extends Controller
         $objUser = Auth::user();
 
         // Vérifie si le support est déjà dans la collection
-        $objGameUserExists = CollectionSupport::query()->where('id',$objUser->id)->where('support_id',$support_id)->exists();
+        $objSupportUserExists = CollectionSupport::query()->where('id',$objUser->id)->where('support_id',$support_id)->exists();
 
-        if($objGameUserExists){
+        if($objSupportUserExists){
             $strMessage = "Ce support a déjà été ajouté à votre collection";
         }
         else{
             // Ajout du support
             DB::table('collection_supports')->insert([
                 'id' => $objUser->id,
-                'support_id' => $iSupportId
+                'support_id' => $support_id
             ]);
             $strMessage = "Ce support a bien été ajouté à votre collection.";
         }
@@ -36,7 +36,7 @@ class CollectionSupportController extends Controller
         $strLink = "/liste_supports";
         $strLinkMessage = "Retour à la liste des supports";
 
-        return view('pages/message',compact("iSupportId","strMessage","strLink","strLinkMessage"));
+        return view('pages/message',compact("strMessage","strLink","strLinkMessage"));
     }
 
     // Récupère les supports de la collection de l'utilisateur pour les afficher dans profil_collection_supports
@@ -99,7 +99,7 @@ class CollectionSupportController extends Controller
         // Si le support n'existe pas dans la collection, rediriger avec un message d'erreur
         if (!$objCollectionSupport) {
             $strMessage = "Ce support n'est pas dans votre collection.";
-            $strLink = "/profil_collection_supports/" . $id;  // Rediriger vers la page de collection des supports
+            $strLink = "/profil_collection_supports/{$id}";  // Rediriger vers la page de collection des supports
             $strLinkMessage = "Retour à ma collection de supports";
             return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
         }
@@ -139,8 +139,36 @@ class CollectionSupportController extends Controller
         $strLink = "/profil_collection_supports/{$id}";  // Lien vers la collection de l'utilisateur
         $strLinkMessage = "Retour à ma collection de supports";
 
-        return view('pages.message', compact('strMessage', 'strLink', 'strLinkMessage'));
+        return view('/pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
     }
 
+    // Supprime un support de la collection de l'utilisateur
+    public function delete_collection_support($support_id)
+    {
+        $objUser = Auth::user();
+
+        // Vérifier si le jeu existe dans la collection de l'utilisateur
+        $objCollectionSupport = CollectionSupport::where('support_id', $support_id)
+                                            ->where('id', $objUser->id)
+                                            ->first();
+
+        // Si le jeu n'existe pas dans la collection, rediriger avec un message d'erreur
+        if (!$objCollectionSupport) {
+            $strMessage = "Ce support n'existe pas dans votre collection.";
+            $strLink = "/profil_collection_supports/{$support_id}"; // Rediriger vers la collection
+            $strLinkMessage = "Retour à ma collection de supports";
+            return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
+        }
+        else{
+            // Supprimer le jeu de la collection
+            $objCollectionSupport->delete();
+
+            // Message personnalisé pour la vue message
+            $strMessage = "Le support a été supprimé de votre collection avec succès.";
+            $strLink = "/profil_collection_supports/{$objUser->id}"; // Redirection vers la collection
+            $strLinkMessage = "Retour à ma collection de supports";
+        }
+        return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
+    }
 
 }

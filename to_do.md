@@ -2,13 +2,9 @@
 
 ## Fichiers actuels
 
-* Rajouter les contrôles sur les pages/routes d'ajout dans la collection
 * Faire le CSS
 * Rajouter les Covers
-* Gérer la note et le commentaire pour chaque jeu
-* Trigger pour rating
-* Suppression en cascade
-* Mettre les bonnes pages pour l'authentification
-* Rajouter owned_by pour SUPPORT dans MCD
-* Expliquer find() et whereHas()
-* Faire la recherche d'utilisateurs (hors administration)
+* Gérer la note et le commentaire pour chaque jeu + suppression dans la collection (problème)
+* Afficher informations restantes sur les jeux (images, commentaires, logos de supports)
+* Contrôles pour les paramètres de tri (passer par une condition)
+* Ajouter le lien de la modération pour l'en-tête

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Support;
+use App\Models\CollectionSupport;
 
 class SupportController extends Controller
 {
@@ -46,11 +48,24 @@ class SupportController extends Controller
     // A partir du support_id passé en paramètres
     public function detail_support($support_id)
     {
+        $bOwned = false;
 
         // Requête pour l'appel du support à détailler
         $objSupport = Support::find($support_id);
 
-        return view('pages/detail_support', compact('objSupport'));
+        // Vérifier si l'utilisateur connecté a déjà le jeu ou non
+        $objUser = Auth::user();
+        if($objUser){
+            // Récupérer le couple jeu-utilisateur à vérifier
+            $objCollectionSupport = CollectionSupport::where('support_id', $support_id)
+                ->where('id', $objUser->id)
+                ->first();
+            if($objCollectionSupport){
+                $bOwned = true;
+            }
+        }
+
+        return view('pages/detail_support', compact('objSupport','objUser','bOwned'));
     }
 
 }

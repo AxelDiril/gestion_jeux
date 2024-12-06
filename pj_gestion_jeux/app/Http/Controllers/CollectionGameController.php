@@ -30,7 +30,7 @@ class CollectionGameController extends Controller
             // Ajout du jeu
             DB::table('collection_games')->insert([
                 'id' => $objUser->id,
-                'game_id' => $iGameId
+                'game_id' => $game_id
             ]);
             $strMessage = "Ce jeu a bien été ajouté à votre collection.";
         }
@@ -39,7 +39,7 @@ class CollectionGameController extends Controller
         $strLink = "/liste_jeux";
         $strLinkMessage = "Retour à la liste des jeux";
 
-        return view('pages/message',compact("iGameId","strMessage","strLink","strLinkMessage"));
+        return view('pages/message',compact("strMessage","strLink","strLinkMessage"));
     }
 
     // Récupère les jeux de la collection de l'utilisateur pour les afficher dans profil_collection_jeux
@@ -117,7 +117,7 @@ class CollectionGameController extends Controller
         // Si le jeu n'existe pas dans la collection, rediriger avec un message d'erreur
         if (!$objCollectionGame) {
             $strMessage = "Ce jeu n'est pas dans votre collection.";
-            $strLink = "/profil_collection_jeux/" . $id;  // Rediriger vers la page de collection des jeux
+            $strLink = "/profil_collection_jeux/{$id}";  // Rediriger vers la page de collection des jeux
             $strLinkMessage = "Retour à ma collection de jeux";
             return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
         }
@@ -133,11 +133,6 @@ class CollectionGameController extends Controller
     public function update_collection_jeu(Request $request, $gameId, $userId)
     {
         // Récupérer le couple jeu-utilisateur à mettre à jour
-        $objCollectionGame = CollectionGame::where('game_id', $gameId)
-        ->where('id', $userId)
-        ->first();
-
-        // Vérifier si le couple jeu-utilisateur existe
         $objCollectionGame = CollectionGame::where('game_id', $gameId)
         ->where('id', $userId)
         ->first();
@@ -159,10 +154,7 @@ class CollectionGameController extends Controller
         ]);
     
         // Mettre à jour les informations
-        $objCollectionGame->note = $request->note;
-        $objCollectionGame->comment = $request->comment;
-        $objCollectionGame->progress_id = $request->progress_id;
-        $objCollectionGame->save();
+        $objCollectionGame->update($request->all());
     
         // Variables pour la vue du message
         $strMessage = "Les informations du jeu ont été mises à jour avec succès.";
@@ -172,4 +164,32 @@ class CollectionGameController extends Controller
         return view('/pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
     }
     
+    // Supprime un jeu de la collection de l'utilisateur
+    public function delete_collection_jeu($game_id)
+    {
+        $objUser = Auth::user();
+
+        // Vérifier si le jeu existe dans la collection de l'utilisateur
+        $objCollectionGame = CollectionGame::where('game_id', $game_id)
+                                            ->where('id', $objUser->id)
+                                            ->first();
+
+        // Si le jeu n'existe pas dans la collection, rediriger avec un message d'erreur
+        if (!$objCollectionGame) {
+            $strMessage = "Ce jeu n'existe pas dans votre collection.";
+            $strLink = "/profil_collection_jeux/{$objUser->id}"; // Rediriger vers la collection
+            $strLinkMessage = "Retour à ma collection de jeux";
+            return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
+        }
+        else{
+            // Supprimer le jeu de la collection
+            $objCollectionGame->delete();
+
+            // Message personnalisé pour la vue message
+            $strMessage = "Le jeu a été supprimé de votre collection avec succès.";
+            $strLink = "/profil_collection_jeux/{$objUser->id}"; // Redirection vers la collection
+            $strLinkMessage = "Retour à ma collection de jeux";
+        }
+        return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
+    }
 }
