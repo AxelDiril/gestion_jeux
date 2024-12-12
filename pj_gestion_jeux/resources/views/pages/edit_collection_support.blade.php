@@ -1,7 +1,7 @@
 @extends('layouts.structure')
 
 @section('titre')
-    Modifier le commentaire du support
+    Modifier le commentaire
 @stop
 
 @section('contenu')

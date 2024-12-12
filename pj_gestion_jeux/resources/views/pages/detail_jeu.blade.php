@@ -22,6 +22,7 @@
         <p>Moyenne : Aucune note attribuée</p>
     @endif
     <p>Description : {{ $objGame->game_desc }}</p>
+    <!-- Change le lien si l'utilisateur connecté possède déjà le jeu ou non -->
     @auth
         @if($bOwned == true)
             <a href="/delete_collection_jeu/{{ $objGame->game_id }}">Retirer de la collection</a>

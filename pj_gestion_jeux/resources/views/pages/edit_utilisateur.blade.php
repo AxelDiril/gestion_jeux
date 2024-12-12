@@ -1,7 +1,7 @@
 @extends('layouts/structure')
 
 @section('titre')
-    Édition de l'utilisateur
+    Modification de l'utilisateur
 @stop
 
 @section('contenu')

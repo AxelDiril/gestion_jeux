@@ -1,7 +1,7 @@
 @extends('layouts/structure')
 
 @section('titre')
-    Profil
+    Profil de {{ $objUser->name }}
 @stop
 
 @section('css', asset('styles/liste_jeux.css'))
@@ -19,9 +19,10 @@
 
     <h2>Derniers jeux de la collection</h2>
 
-    <div class="game_grid">
+    <div class="grid">
+        <!-- CInq derniers jeux ajoutés dans GJ_collection_games -->
         @foreach($arLatestGames as $keyGame)
-        <div class="game_item">
+        <div class="item">
                 <a href="/detail_jeu/{{ $keyGame->game_id }}">{{ $keyGame->game->game_name }}</a>
                 <p>{{ $keyGame->game->game_year }}</p>
                 <p>{{ $keyGame->game->support->support_name }}</p>
@@ -33,9 +34,10 @@
 
     <h2>Derniers supports de la collection</h2>
 
-    <div class="game_grid">
+    <div class="grid">
+        <!-- CInq derniers supports ajoutés dans GJ_collection_supports -->
         @foreach($arLatestSupports as $keySupport)
-        <div class="game_item">
+        <div class="item">
                 <a href="/detail_support/{{ $keySupport->support_id }}">{{ $keySupport->support->support_name }}</a>
                 <p>{{ $keySupport->support->support_year }}</p>
         </div>

@@ -9,21 +9,34 @@ use App\Models\User;
 use App\Models\Support;
 use App\Models\CollectionSupport;
 
+/**
+ * Contrôleur pour gérer les actions sur la collection de supports d'un utilisateur.
+ * Permet d'ajouter des supports, de les afficher, de les éditer et de les supprimer.
+ */
 class CollectionSupportController extends Controller
 {
-    // Ajoute un support dans la collection dont l'ID est envoyé en paramètres.
-    // Vérifie d'abord si il n'est pas déjà dans la collection
-    public function add_to_collection($support_id){
-
+    /**
+     * Ajoute un support à la collection de l'utilisateur.
+     *
+     * Cette méthode vérifie d'abord si le support est déjà présent dans la collection.
+     * Si ce n'est pas le cas, elle l'ajoute à la collection.
+     *
+     * @param  int  $support_id L'ID du support à ajouter.
+     * @return \Illuminate\View\View La vue affichant un message de confirmation ou d'erreur.
+     */
+    public function add_to_collection($support_id)
+    {
         $objUser = Auth::user();
 
         // Vérifie si le support est déjà dans la collection
-        $objSupportUserExists = CollectionSupport::query()->where('id',$objUser->id)->where('support_id',$support_id)->exists();
+        $objSupportUserExists = CollectionSupport::query()
+            ->where('id', $objUser->id)
+            ->where('support_id', $support_id)
+            ->exists();
 
-        if($objSupportUserExists){
-            $strMessage = "Ce support a déjà été ajouté à votre collection";
-        }
-        else{
+        if ($objSupportUserExists) {
+            $strMessage = "Ce support a déjà été ajouté à votre collection.";
+        } else {
             // Ajout du support
             DB::table('collection_supports')->insert([
                 'id' => $objUser->id,
@@ -36,15 +49,21 @@ class CollectionSupportController extends Controller
         $strLink = "/liste_supports";
         $strLinkMessage = "Retour à la liste des supports";
 
-        return view('pages/message',compact("strMessage","strLink","strLinkMessage"));
+        return view('pages/message', compact("strMessage", "strLink", "strLinkMessage"));
     }
 
-    // Récupère les supports de la collection de l'utilisateur pour les afficher dans profil_collection_supports
-    // Les supports affichés dépendent des filtres saisis par l'utilisateur
-    public function collection_supports(Request $request, $id){
-
-         // Vérifier si l'utilisateur existe avec l'ID passé en paramètre
-        $objUser = User::find($id);  // Recherche de l'utilisateur par ID
+    /**
+     * Affiche les supports dans la collection d'un utilisateur.
+     * Permet également de filtrer les résultats selon les critères fournis dans la requête.
+     *
+     * @param  \Illuminate\Http\Request  $request La requête contenant les filtres.
+     * @param  int  $id L'ID de l'utilisateur dont la collection doit être affichée.
+     * @return \Illuminate\View\View La vue affichant la collection des supports.
+     */
+    public function collection_supports(Request $request, $id)
+    {
+        // Vérifier si l'utilisateur existe avec l'ID passé en paramètre
+        $objUser = User::find($id);
 
         // Si l'utilisateur n'existe pas, rediriger vers la page d'accueil avec un message
         if (!$objUser) {
@@ -61,40 +80,45 @@ class CollectionSupportController extends Controller
         $strSupportName = $request->query('game_name');
 
         // Construction de la requête pour récupérer les supports de l'utilisateur
-        // + Jointures avec GJ_supports pour récupérer leur noms et leurs années de sortie
         $arCollectionSupports = CollectionSupport::query()
-        ->join('supports',"supports.support_id","=","collection_supports.support_id")
-        ->where('id',$id);
+            ->join('supports', "supports.support_id", "=", "collection_supports.support_id")
+            ->where('id', $id);
 
         // Ordre des supports
-        if(!empty($strOrder) && !empty($strDirection)){
-            $arCollectionSupports = $arCollectionSupports->orderBy($strOrder,$strDirection);
+        if (!empty($strOrder) && !empty($strDirection)) {
+            $arCollectionSupports = $arCollectionSupports->orderBy($strOrder, $strDirection);
         }
 
-        // Filtres optionnels : les conditions s'additionnent si plusieurs filtres sont choisis
-        if(!empty($strSupportName) && $strSupportName != "all"){
-            $arCollectionSupports->where('support_name','LIKE','%'.$strSupportName.'%');
+        // Filtres optionnels
+        if (!empty($strSupportName) && $strSupportName != "all") {
+            $arCollectionSupports->where('support_name', 'LIKE', '%' . $strSupportName . '%');
         }
 
-        if(!empty($iSupportYear) && $iSupportYear != "all"){
-            $arCollectionSupports->where('support_year',$iSupportYear);
+        if (!empty($iSupportYear) && $iSupportYear != "all") {
+            $arCollectionSupports->where('support_year', $iSupportYear);
         }
 
         $arCollectionSupports = $arCollectionSupports->get();
-        
-        // Récupérer les années pour les filtres
-        $arYears = Support::select('support_year')->distinct()->orderBy('support_year','desc')->get();
 
-        return view('pages/profil_collection_supports', compact('arCollectionSupports', 'arYears', 'iSupportYear','strSupportName','id'));
+        // Récupérer les années pour les filtres
+        $arYears = Support::select('support_year')->distinct()->orderBy('support_year', 'desc')->get();
+
+        return view('pages/profil_collection_supports', compact('arCollectionSupports', 'arYears', 'iSupportYear', 'strSupportName', 'id'));
     }
 
-    // Editer le commentaire d'un support dans edit_collection_support
+    /**
+     * Affiche la page d'édition du commentaire d'un support dans la collection.
+     *
+     * @param  int  $supportId L'ID du support à éditer.
+     * @param  int  $id L'ID de l'utilisateur.
+     * @return \Illuminate\View\View La vue d'édition du commentaire.
+     */
     public function edit_collection_support($supportId, $id)
     {
         // Vérifier si le support existe dans la collection de l'utilisateur
         $objCollectionSupport = CollectionSupport::where('support_id', $supportId)
-                                                ->where('id', $id)
-                                                ->first();
+            ->where('id', $id)
+            ->first();
 
         // Si le support n'existe pas dans la collection, rediriger avec un message d'erreur
         if (!$objCollectionSupport) {
@@ -108,13 +132,20 @@ class CollectionSupportController extends Controller
         return view('pages/edit_collection_support', compact('objCollectionSupport'));
     }
 
-    // Mettre à jour le commentaire d'un support dans la collection
+    /**
+     * Met à jour le commentaire d'un support dans la collection de l'utilisateur.
+     *
+     * @param  \Illuminate\Http\Request  $request La requête contenant le nouveau commentaire.
+     * @param  int  $supportId L'ID du support à mettre à jour.
+     * @param  int  $id L'ID de l'utilisateur.
+     * @return \Illuminate\View\View La vue affichant le message de confirmation.
+     */
     public function update_collection_support(Request $request, $supportId, $id)
     {
         // Vérifier si le couple support-utilisateur existe
         $objCollectionSupport = CollectionSupport::where('support_id', $supportId)
-                                                ->where('id', $id)
-                                                ->first();
+            ->where('id', $id)
+            ->first();
 
         // Si le couple support-utilisateur n'existe pas, rediriger avec un message d'erreur
         if (!$objCollectionSupport) {
@@ -122,7 +153,7 @@ class CollectionSupportController extends Controller
             $strLink = "/profil_collection_supports/{$id}";  // Lien vers la collection de l'utilisateur
             $strLinkMessage = "Retour à ma collection de supports";
 
-            return view('pages.message', compact('strMessage', 'strLink', 'strLinkMessage'));
+            return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
         }
 
         // Validation du commentaire
@@ -139,28 +170,32 @@ class CollectionSupportController extends Controller
         $strLink = "/profil_collection_supports/{$id}";  // Lien vers la collection de l'utilisateur
         $strLinkMessage = "Retour à ma collection de supports";
 
-        return view('/pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
+        return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
     }
 
-    // Supprime un support de la collection de l'utilisateur
+    /**
+     * Supprime un support de la collection de l'utilisateur.
+     *
+     * @param  int  $support_id L'ID du support à supprimer.
+     * @return \Illuminate\View\View La vue affichant le message de confirmation ou d'erreur.
+     */
     public function delete_collection_support($support_id)
     {
         $objUser = Auth::user();
 
-        // Vérifier si le jeu existe dans la collection de l'utilisateur
+        // Vérifier si le support existe dans la collection de l'utilisateur
         $objCollectionSupport = CollectionSupport::where('support_id', $support_id)
-                                            ->where('id', $objUser->id)
-                                            ->first();
+            ->where('id', $objUser->id)
+            ->first();
 
-        // Si le jeu n'existe pas dans la collection, rediriger avec un message d'erreur
+        // Si le support n'existe pas dans la collection, rediriger avec un message d'erreur
         if (!$objCollectionSupport) {
             $strMessage = "Ce support n'existe pas dans votre collection.";
             $strLink = "/profil_collection_supports/{$support_id}"; // Rediriger vers la collection
             $strLinkMessage = "Retour à ma collection de supports";
             return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
-        }
-        else{
-            // Supprimer le jeu de la collection
+        } else {
+            // Supprimer le support de la collection
             $objCollectionSupport->delete();
 
             // Message personnalisé pour la vue message
@@ -170,5 +205,4 @@ class CollectionSupportController extends Controller
         }
         return view('pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
     }
-
 }

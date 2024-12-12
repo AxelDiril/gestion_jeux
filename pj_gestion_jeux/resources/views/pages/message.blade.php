@@ -1,10 +1,8 @@
 @extends('layouts/structure')
 
 @section('titre')
-    Ajout à la collection
+    Message
 @stop
-
-@section('css', asset('styles/liste_jeux.css'))
 
 @section('contenu')
     {{ $strMessage }}

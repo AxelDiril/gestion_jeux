@@ -12,10 +12,19 @@ use App\Models\Genre;
 use App\Models\Progression;
 use App\Models\CollectionGame;
 
+/**
+ * Contrôleur pour gérer les jeux dans la collection d'un utilisateur.
+ * Fournit des actions pour ajouter, afficher, éditer et supprimer des jeux de la collection.
+ */
 class CollectionGameController extends Controller
 {
-    // Ajoute un jeu dans la collection dont l'ID est envoyé en paramètres.
-    // Vérifie d'abord si il n'est pas déjà dans la collection
+    /**
+     * Ajoute un jeu dans la collection de l'utilisateur.
+     * Vérifie d'abord si le jeu n'est pas déjà dans la collection.
+     *
+     * @param int $game_id L'ID du jeu à ajouter.
+     * @return \Illuminate\View\View La vue avec un message indiquant si l'ajout a réussi ou non.
+     */
     public function add_to_collection($game_id){
 
         $objUser = Auth::user();
@@ -42,10 +51,16 @@ class CollectionGameController extends Controller
         return view('pages/message',compact("strMessage","strLink","strLinkMessage"));
     }
 
-    // Récupère les jeux de la collection de l'utilisateur pour les afficher dans profil_collection_jeux
-    // Les jeux affichés dépendent des filtres saisis par l'utilisateur
-    public function collection_jeux(Request $request, $id){
-
+    /**
+     * Affiche les jeux de la collection de l'utilisateur avec des filtres optionnels.
+     * Permet de filtrer par support, genre, année, ou nom du jeu.
+     *
+     * @param \Illuminate\Http\Request $request L'instance de la requête HTTP.
+     * @param int $id L'ID de l'utilisateur dont on veut afficher la collection de jeux.
+     * @return \Illuminate\View\View La vue avec les jeux filtrés et les options de filtrage.
+     */
+    public function collection_jeux(Request $request, $id)
+    {
         // Vérifier si l'utilisateur existe avec l'ID passé en paramètre
         $objUser = User::find($id);  // Recherche de l'utilisateur par ID
 
@@ -86,15 +101,17 @@ class CollectionGameController extends Controller
         }
 
         if (!empty($iGenreId) && $iGenreId != "all") {
-            $arCollectionGames->where('genre_id', $iGenreId);
+            $arCollectionGames->where('game_genres.genre_id', $iGenreId);
         }
 
         if (!empty($iGameYear) && $iGameYear != "all") {
             $arCollectionGames->whereYear('game_year', $iGameYear);
         }
 
-        // Récupérer les jeux de la collection
-        $arCollectionGames = $arCollectionGames->distinct('game_id')->get();
+        // Récupérer les jeux de la collection et s'assurer qu'ils soient distincts (uniques par game_id)
+        $arCollectionGames = $arCollectionGames->select('games.*')  // Sélectionner seulement les colonnes de la table games
+            ->distinct()  // S'assurer que les jeux sont uniques
+            ->get();
 
         // Récupérer les noms/années pour les filtres
         $arSupports = Support::orderBy('support_name', 'asc')->get();
@@ -105,8 +122,14 @@ class CollectionGameController extends Controller
         return view('pages/profil_collection_jeux', compact('arCollectionGames', 'arSupports', 'arYears', 'arGenres', 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId', 'id'));
     }
 
-
-    // Editer la note, le commentaire et la progression d'un jeu dans edit_collection_jeu
+    /**
+     * Affiche le formulaire pour éditer la note, le commentaire et la progression d'un jeu.
+     * Vérifie si le jeu appartient bien à la collection de l'utilisateur.
+     *
+     * @param int $gameId L'ID du jeu à éditer.
+     * @param int $id L'ID de l'utilisateur qui possède le jeu.
+     * @return \Illuminate\View\View La vue d'édition du jeu.
+     */
     public function edit_collection_jeu($gameId, $id)
     {
         // Vérifier si le jeu existe dans la collection de l'utilisateur
@@ -129,7 +152,14 @@ class CollectionGameController extends Controller
         return view('pages/edit_collection_jeu', compact('objCollectionGame', 'arProgressions'));
     }
 
-    // Mettre à jour les informations du jeu saisies dans edit_collection_jeu
+    /**
+     * Met à jour les informations d'un jeu dans la collection de l'utilisateur (note, commentaire, progression).
+     *
+     * @param \Illuminate\Http\Request $request L'instance de la requête HTTP avec les nouvelles données.
+     * @param int $gameId L'ID du jeu à mettre à jour.
+     * @param int $userId L'ID de l'utilisateur qui possède le jeu.
+     * @return \Illuminate\View\View La vue avec un message de confirmation ou d'erreur.
+     */
     public function update_collection_jeu(Request $request, $gameId, $userId)
     {
         // Récupérer le couple jeu-utilisateur à mettre à jour
@@ -164,7 +194,13 @@ class CollectionGameController extends Controller
         return view('/pages/message', compact('strMessage', 'strLink', 'strLinkMessage'));
     }
     
-    // Supprime un jeu de la collection de l'utilisateur
+    /**
+     * Supprime un jeu de la collection de l'utilisateur.
+     * Vérifie d'abord si le jeu existe dans la collection avant de le supprimer.
+     *
+     * @param int $game_id L'ID du jeu à supprimer de la collection.
+     * @return \Illuminate\View\View La vue avec un message indiquant si la suppression a réussi ou non.
+     */
     public function delete_collection_jeu($game_id)
     {
         $objUser = Auth::user();

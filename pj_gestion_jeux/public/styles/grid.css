@@ -1,0 +1,15 @@
+.grid{
+    display: grid;
+    background-color: rgb(149, 149, 149);
+    grid-template-columns: repeat(5, 1fr);
+    padding: 2em;
+    border-radius: 30px;
+    margin: 0.5em;
+    gap: 10px;
+}
+
+.item{
+    background-color: rgb(239, 239, 239);
+    border-radius: 30px;
+    text-align: center;
+}

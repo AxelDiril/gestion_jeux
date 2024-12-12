@@ -1,7 +1,7 @@
 @extends('layouts/structure')
 
 @section('titre')
-    Liste de jeux
+    Liste des jeux
 @stop
 
 @section('css', asset('styles/liste_jeux.css'))
@@ -10,7 +10,9 @@
     <h1>Liste de jeux</h1>
 
     <form method="GET">
+        <!-- Recherche par nom -->
         <input type="text" name="game_name" placeholder="Nom du jeu..." value="{{ $strGameName }}">
+        <!-- Filtre par support -->
         <select name="support">
             <option value="all">Tous supports</option>
             @foreach($arSupports as $keySupport)
@@ -20,6 +22,7 @@
                 </option>
             @endforeach
         </select>
+        <!-- Filtre par genre -->
         <select name="genre_id">
             <option value="all">Tous genres</option>
             @foreach($arGenres as $keyGenre)
@@ -29,6 +32,7 @@
                 </option>
             @endforeach
         </select>
+        <!-- Filtre par année -->
         <select name="game_year">
             <option value="all">Toutes les années</option>
             @foreach($arYears as $keyYear)
@@ -38,6 +42,7 @@
             </option>
             @endforeach
         </select>
+        <!-- Tri -->
         <select name="order">
             <option value="game_name" {{ request()->get('Order') == 'game_nom' ? 'selected' : '' }}>Ordre alphabetique</option>
             <option value="game_year" {{ request()->get('Order') == 'game_year' ? 'selected' : '' }}>Année</option>
@@ -55,9 +60,9 @@
         <p>Aucun résultat ne correspond à votre requête</p>
     @else
         <!-- Liste des jeux dans GJ_Games -->
-        <div class="game_grid">
+        <div class="grid">
             @foreach($arGames as $keyGame)
-            <div class="game_item">
+            <div class="item">
                 <a href="/detail_jeu/{{ $keyGame->game_id }}">{{ $keyGame->game_name }}</a>
                 <p>{{ $keyGame->game_year }}</p>
                 <p>{{ $keyGame->support->support_name }}</p>

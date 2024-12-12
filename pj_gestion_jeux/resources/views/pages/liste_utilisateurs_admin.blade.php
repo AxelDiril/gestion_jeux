@@ -1,13 +1,12 @@
 @extends('layouts/structure')
 
 @section('titre')
-    Liste des utilisateurs
+    Modération
 @stop
 
 @section('contenu')
     <h1>Liste des utilisateurs</h1>
 
-    <!-- Formulaire de filtrage -->
     <form method="GET">
         <!-- Recherche par nom -->
         <input type="text" name="name" placeholder="Nom de l'utilisateur..." value="{{ $strName }}">
@@ -44,7 +43,7 @@
     @if($arUsers->isEmpty())
         <p>Aucun utilisateur ne correspond à votre requête</p>
     @else
-        <!-- Tableau des utilisateurs -->
+        <!-- Tableau des utilisateurs dans GJ_users -->
         <table class="user_table">
             <thead>
                 <tr>
@@ -53,8 +52,8 @@
                     <th>Date d'inscription</th>
                     <th>Visibilité</th>
                     <th>Code</th>
-                    <th>Peut Contribuer</th> <!-- Nouvelle colonne "Peut Contribuer" -->
-                    <th>Actions</th> <!-- Colonne des actions -->
+                    <th>Peut Contribuer</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,9 +64,9 @@
                     <td>{{ $user->created_at->format('d/m/Y') }}</td>
                     <td>{{ $user->visibilite ? 'Visible' : 'Invisible' }}</td>
                     <td>{{ $user->code }}</td>
-                    <td>{{ $user->can_contribute ? 'Oui' : 'Non' }}</td> <!-- Nouvelle colonne "Peut Contribuer" -->
+                    <td>{{ $user->can_contribute ? 'Oui' : 'Non' }}</td>
                     <td>
-                        <!-- Lien vers la page d'édition -->
+                        <!-- Lien vers les pages d'édition et de suppression -->
                         <a href="edit_utilisateur/{{ $user->id }}">Modifier</a>
                         <a href="delete_utilisateur/{{ $user->id }}">Exclure</a>
                     </td>

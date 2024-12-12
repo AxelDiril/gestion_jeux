@@ -7,7 +7,6 @@
 @section('contenu')
     <h1>Liste des utilisateurs</h1>
 
-    <!-- Formulaire de filtrage -->
     <form method="GET">
         <!-- Recherche par nom -->
         <input type="text" name="name" placeholder="Nom de l'utilisateur..." value="{{ $strName }}">
@@ -28,8 +27,7 @@
 
     @if($arUsers->isEmpty())
         <p>Aucun utilisateur ne correspond à votre requête</p>
-    @else
-        <!-- Tableau des utilisateurs -->
+    @else>
         <table class="user_table">
             <thead>
                 <tr>
@@ -38,6 +36,7 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- Liste des utilisateurs de GJ_users ayant un profil public -->
                 @foreach($arUsers as $user)
                 <tr>
                     <td><a href="/profil/{{ $user->id }}/">{{ $user->name }}</a></td>

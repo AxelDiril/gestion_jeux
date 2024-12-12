@@ -10,7 +10,9 @@
     <h1>Liste des supports</h1>
 
     <form method="GET">
+        <!-- Recherche par nom -->
         <input type="text" name="support_name" placeholder="Nom du support..." value="{{ $strSupportName}}">
+        <!-- Filtre par année -->
         <select name="support_year">
             <option value="all">Toutes les années</option>
             @foreach($arYears as $keyYear)
@@ -20,6 +22,7 @@
             </option>
             @endforeach
         </select>
+        <!-- Tri -->
         <select name="order">
             <option value="support_name" {{ request()->get('order') == 'support_name' ? 'selected' : '' }}>Ordre alphabetique</option>
             <option value="support_year" {{ request()->get('order') == 'support_year' ? 'selected' : '' }}>Année</option>
@@ -36,9 +39,9 @@
         <p>Aucun résultat ne correspond à votre requête</p>
     @else
         <!-- Liste des supports dans GJ_Supports -->
-        <div class="game_grid">
+        <div class="grid">
             @foreach($arCollectionSupports as $keySupport)
-            <div class="game_item">
+            <div class="item">
                 <a href="/detail_support/{{ $keySupport->support_id }}">{{ $keySupport->support->support_name }}</a>
                 <p>{{ $keySupport->support->support_year }}</p>
                 <a href="/edit_collection_support/{{ $keySupport->support_id }}/{{ $id }}">Editer</a>

@@ -1,1 +1,1 @@
-<p>Footer</p>
+<p>Gestion Jeux</p>

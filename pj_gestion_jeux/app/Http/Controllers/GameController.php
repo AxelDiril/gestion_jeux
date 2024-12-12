@@ -10,10 +10,22 @@ use App\Models\Genre;
 use App\Models\GameGenre;
 use App\Models\CollectionGame;
 
+/**
+ * Contrôleur pour la gestion des jeux.
+ * Permet d'afficher la liste des jeux, les détails d'un jeu, et de gérer les filtres.
+ */
 class GameController extends Controller
 {
-    // Récupère la liste de tous les jeux de GJ_games
-    // Affiche les jeux selon les filtres envoyés en paramètres
+    /**
+     * Récupère et affiche la liste des jeux avec les filtres.
+     *
+     * Cette méthode permet de filtrer les jeux selon les critères fournis dans la requête,
+     * tels que le nom du jeu, l'année de sortie, le support, et le genre.
+     * Elle renvoie également la liste des jeux sous forme de vue.
+     *
+     * @param  \Illuminate\Http\Request  $request Les paramètres de la requête HTTP.
+     * @return \Illuminate\View\View La vue affichant la liste des jeux filtrée.
+     */
     public function liste_jeux(Request $request)
     {
         // Récupérer les filtres passés dans $request
@@ -59,10 +71,17 @@ class GameController extends Controller
         return view('pages/liste_jeux', compact('arGames', 'arSupports', 'arYears', 'arGenres', 'strGameName', 'iSupportId', 'iGameYear', 'iGenreId'));
     }
     
-    // Récupère toutes les informations d'un jeu choisi depuis liste_jeux ou profil_collection_jeux
-    // A partir du game_id passé en paramètres
-    public function detail_jeu($game_id){
-
+    /**
+     * Récupère et affiche les détails d'un jeu sélectionné.
+     *
+     * Cette méthode récupère toutes les informations d'un jeu à partir de son `game_id`.
+     * Elle vérifie également si l'utilisateur connecté possède déjà ce jeu dans sa collection.
+     *
+     * @param  int  $game_id L'ID du jeu à afficher.
+     * @return \Illuminate\View\View La vue affichant les détails du jeu.
+     */
+    public function detail_jeu($game_id)
+    {
         $bOwned = false;
 
         // Requête pour l'appel du jeu à détailler
@@ -70,17 +89,16 @@ class GameController extends Controller
 
         // Vérifier si l'utilisateur connecté a déjà le jeu ou non
         $objUser = Auth::user();
-        if($objUser){
+        if ($objUser) {
             // Récupérer le couple jeu-utilisateur à vérifier
             $objCollectionGame = CollectionGame::where('game_id', $game_id)
-            ->where('id', $objUser->id)
-            ->first();
-            if($objCollectionGame){
+                ->where('id', $objUser->id)
+                ->first();
+            if ($objCollectionGame) {
                 $bOwned = true;
             }
         }
 
-        return view('pages/detail_jeu', compact('objGame','objUser','bOwned'));
-
+        return view('pages/detail_jeu', compact('objGame', 'objUser', 'bOwned'));
     }
 }

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ asset('styles/common.css') }}">
-        <link rel="stylesheet" href="@yield('css')">
+        <link rel="stylesheet" href="{{ asset('styles/grid.css') }}">
 
         <title>
             @yield('titre')
