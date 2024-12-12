@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class PasswOrdersetToken
+ * Class PasswordResetToken
  * 
  * @property string $email
  * @property string $token
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class PasswOrdersetToken extends Model
+class PasswordResetToken extends Model
 {
 	protected $table = 'GJ_password_reset_tokens';
 	protected $primaryKey = 'email';

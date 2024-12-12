@@ -81,20 +81,20 @@ Search.appendIndex(
             "summary": "Update\u0020the\u0020user\u0027s\u0020password.",
             "url": "classes/App-Http-Controllers-Auth-PasswordController.html#method_update"
         },                {
-            "fqsen": "\\App\\Http\\Controllers\\Auth\\PasswOrdersetLinkController",
-            "name": "PasswOrdersetLinkController",
+            "fqsen": "\\App\\Http\\Controllers\\Auth\\PasswordResetLinkController",
+            "name": "PasswordResetLinkController",
             "summary": "",
-            "url": "classes/App-Http-Controllers-Auth-PasswOrdersetLinkController.html"
+            "url": "classes/App-Http-Controllers-Auth-PasswordResetLinkController.html"
         },                {
-            "fqsen": "\\App\\Http\\Controllers\\Auth\\PasswOrdersetLinkController\u003A\u003Acreate\u0028\u0029",
+            "fqsen": "\\App\\Http\\Controllers\\Auth\\PasswordResetLinkController\u003A\u003Acreate\u0028\u0029",
             "name": "create",
             "summary": "Display\u0020the\u0020password\u0020reset\u0020link\u0020request\u0020view.",
-            "url": "classes/App-Http-Controllers-Auth-PasswOrdersetLinkController.html#method_create"
+            "url": "classes/App-Http-Controllers-Auth-PasswordResetLinkController.html#method_create"
         },                {
-            "fqsen": "\\App\\Http\\Controllers\\Auth\\PasswOrdersetLinkController\u003A\u003Astore\u0028\u0029",
+            "fqsen": "\\App\\Http\\Controllers\\Auth\\PasswordResetLinkController\u003A\u003Astore\u0028\u0029",
             "name": "store",
             "summary": "Handle\u0020an\u0020incoming\u0020password\u0020reset\u0020link\u0020request.",
-            "url": "classes/App-Http-Controllers-Auth-PasswOrdersetLinkController.html#method_store"
+            "url": "classes/App-Http-Controllers-Auth-PasswordResetLinkController.html#method_store"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\Auth\\RegisteredUserController",
             "name": "RegisteredUserController",
