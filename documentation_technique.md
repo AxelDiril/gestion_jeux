@@ -266,4 +266,3 @@ if ($objUser == false || $objUser->code == "U") {
 ```
 
 
-
