@@ -1,4 +1,4 @@
-# GUIDE D'INSTALLATION DE GESTION_JEUX #
+# GUIDE D'INSTALLATION DE GESTION JEUX #
 
 * Importer le script de création des tables dans votre base de données
 * Importer le script d'insertion dans votre base de données

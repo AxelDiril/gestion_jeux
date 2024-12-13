@@ -68,7 +68,9 @@
                     <td>
                         <!-- Lien vers les pages d'édition et de suppression -->
                         <a href="edit_utilisateur/{{ $user->id }}">Modifier</a>
+                        @if ( Auth::user()->code == "A")
                         <a href="delete_utilisateur/{{ $user->id }}">Exclure</a>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

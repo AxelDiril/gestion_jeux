@@ -39,7 +39,7 @@ class GameController extends Controller
         // Construction de la requête
         $arGames = Game::query()
             ->leftJoin('game_genres', 'games.game_id', '=', 'game_genres.game_id') // Jointure avec la table des genres
-            ->select('games.*'); // Sélectionne les colonnes de la table `games`
+            ->select('games.*');
 
         // Ordre des jeux
         $arGames->orderBy($strOrder, $strDirection);

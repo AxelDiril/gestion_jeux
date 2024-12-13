@@ -1,7 +1,5 @@
 # Documentation technique de Gestion Jeux
 
-## Introduction
-
 ## Arborescence
 
 > **pj_gestion_jeux**

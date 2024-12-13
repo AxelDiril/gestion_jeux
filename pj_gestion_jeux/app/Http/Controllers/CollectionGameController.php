@@ -109,7 +109,7 @@ class CollectionGameController extends Controller
         }
 
         // Récupérer les jeux de la collection et s'assurer qu'ils soient distincts (uniques par game_id)
-        $arCollectionGames = $arCollectionGames->select('games.*')  // Sélectionner seulement les colonnes de la table games
+        $arCollectionGames = $arCollectionGames->select('games.*')
             ->distinct()  // S'assurer que les jeux sont uniques
             ->get();
 
