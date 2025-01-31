@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : ven. 13 déc. 2024 à 17:15
+-- Généré le : ven. 31 jan. 2025 à 14:36
 -- Version du serveur : 10.11.6-MariaDB-0+deb12u1
 -- Version de PHP : 8.2.26
 
@@ -21,6 +21,50 @@ SET time_zone = "+00:00";
 -- Base de données : `dirila_gj`
 --
 
+DELIMITER $$
+--
+-- Procédures
+--
+CREATE DEFINER=`dirila`@`%` PROCEDURE `update_game_owned_by` (IN `id` INT)   BEGIN
+
+UPDATE GJ_games SET owned_by = (SELECT COUNT(game_id)
+                                FROM GJ_collection_games
+                                WHERE game_id = id)
+WHERE game_id = id;
+
+END$$
+
+CREATE DEFINER=`dirila`@`%` PROCEDURE `update_rating` (`id` INT)   BEGIN
+	UPDATE GJ_games SET rating = (
+        (SELECT SUM(note) FROM GJ_collection_games
+         WHERE game_id = id)
+        / (SELECT COUNT(game_id) FROM GJ_collection_games WHERE game_id = id))
+    WHERE game_id = id;
+END$$
+
+CREATE DEFINER=`dirila`@`%` PROCEDURE `update_support_owned_by` (IN `id` INT)   BEGIN
+
+UPDATE GJ_supports SET owned_by = (SELECT COUNT(support_id)
+                                FROM GJ_collection_supports
+                                WHERE support_id = id)
+WHERE support_id = id;
+
+END$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_cache`
+--
+
+CREATE TABLE `GJ_cache` (
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
+  `expiration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 --
 -- Déchargement des données de la table `GJ_cache`
 --
@@ -29,27 +73,94 @@ INSERT INTO `GJ_cache` (`key`, `value`, `expiration`) VALUES
 ('bastien.lefevre@example.com|127.0.0.1', 'i:2;', 1733466717),
 ('bastien.lefevre@example.com|127.0.0.1:timer', 'i:1733466716;', 1733466717);
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_cache_locks`
+--
+
+CREATE TABLE `GJ_cache_locks` (
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `expiration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_collection_games`
+--
+
+CREATE TABLE `GJ_collection_games` (
+  `game_id` int(11) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `note` float DEFAULT NULL,
+  `comment` varchar(300) DEFAULT NULL,
+  `progress_id` int(11) NOT NULL DEFAULT 4,
+  `added_at` timestamp NULL DEFAULT current_timestamp(),
+  `owned` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Déchargement des données de la table `GJ_collection_games`
 --
 
-INSERT INTO `GJ_collection_games` (`game_id`, `id`, `note`, `comment`, `progress_id`, `added_at`) VALUES
-(1, 3, 8, NULL, 4, '2024-11-26 17:23:17'),
-(2, 5, 9.5, NULL, 4, '2024-11-26 17:23:17'),
-(3, 7, NULL, NULL, 4, '2024-11-26 17:23:17'),
-(4, 2, 6, NULL, 4, '2024-11-26 17:23:17'),
-(5, 6, 7.5, NULL, 4, '2024-11-26 17:23:17'),
-(10, 1, NULL, NULL, 4, '2024-11-26 17:23:17'),
-(14, 15, NULL, NULL, 4, '2024-11-26 17:23:17'),
-(15, 9, 8.5, NULL, 4, '2024-11-26 17:23:17'),
-(20, 12, NULL, NULL, 4, '2024-11-26 17:23:17'),
-(25, 14, 7, NULL, 4, '2024-11-26 17:23:17'),
-(30, 9, 8, NULL, 4, '2024-12-04 15:32:49'),
-(30, 18, NULL, NULL, 4, '2024-12-04 16:07:41'),
-(55, 20, NULL, NULL, 4, '2024-11-26 17:23:17'),
-(60, 4, 7, NULL, 4, '2024-11-26 17:23:17'),
-(61, 21, NULL, NULL, 4, '2024-11-26 17:23:17'),
-(77, 4, 5, NULL, 4, '2024-12-06 10:45:18');
+INSERT INTO `GJ_collection_games` (`game_id`, `id`, `note`, `comment`, `progress_id`, `added_at`, `owned`) VALUES
+(1, 3, 8, NULL, 4, '2024-11-26 17:23:17', 1),
+(2, 5, 9.5, NULL, 4, '2024-11-26 17:23:17', 1),
+(3, 7, NULL, NULL, 4, '2024-11-26 17:23:17', 1),
+(4, 2, 6, NULL, 4, '2024-11-26 17:23:17', 1),
+(5, 6, 7.5, NULL, 4, '2024-11-26 17:23:17', 1),
+(10, 1, NULL, NULL, 4, '2024-11-26 17:23:17', 1),
+(14, 15, NULL, NULL, 4, '2024-11-26 17:23:17', 1),
+(14, 22, NULL, NULL, 4, '2024-12-16 14:43:57', 1),
+(15, 9, 8.5, NULL, 4, '2024-11-26 17:23:17', 1),
+(20, 12, NULL, NULL, 4, '2024-11-26 17:23:17', 1),
+(25, 14, 7, NULL, 4, '2024-11-26 17:23:17', 1),
+(30, 9, 8, NULL, 4, '2024-12-04 15:32:49', 1),
+(30, 18, NULL, NULL, 4, '2024-12-04 16:07:41', 1),
+(55, 20, NULL, NULL, 4, '2024-11-26 17:23:17', 1),
+(56, 29, NULL, NULL, 4, '2024-12-16 15:34:39', 1),
+(60, 4, 7, NULL, 4, '2024-11-26 17:23:17', 1),
+(61, 21, NULL, NULL, 4, '2024-11-26 17:23:17', 1),
+(77, 4, 5, NULL, 4, '2024-12-06 10:45:18', 1);
+
+--
+-- Déclencheurs `GJ_collection_games`
+--
+DELIMITER $$
+CREATE TRIGGER `TGR_delete_game` AFTER DELETE ON `GJ_collection_games` FOR EACH ROW BEGIN
+UPDATE GJ_games SET owned_by = owned_by - 1
+WHERE game_id = old.game_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `TGR_insert_game` AFTER INSERT ON `GJ_collection_games` FOR EACH ROW BEGIN
+UPDATE GJ_games SET owned_by = owned_by  + 1
+WHERE game_id = new.game_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `TGR_update_game` AFTER UPDATE ON `GJ_collection_games` FOR EACH ROW BEGIN
+	CALL update_rating(new.game_id);
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_collection_supports`
+--
+
+CREATE TABLE `GJ_collection_supports` (
+  `support_id` int(11) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `comment` varchar(200) DEFAULT NULL,
+  `added_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `GJ_collection_supports`
@@ -91,6 +202,55 @@ INSERT INTO `GJ_collection_supports` (`support_id`, `id`, `comment`, `added_at`)
 (28, 9, NULL, '2024-11-26 17:22:49');
 
 --
+-- Déclencheurs `GJ_collection_supports`
+--
+DELIMITER $$
+CREATE TRIGGER `TGR_delete_support` AFTER DELETE ON `GJ_collection_supports` FOR EACH ROW BEGIN
+	CALL update_support_owned_by(old.support_id);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `TGR_insert_support` AFTER INSERT ON `GJ_collection_supports` FOR EACH ROW BEGIN
+	CALL update_support_owned_by(new.support_id);
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_failed_jobs`
+--
+
+CREATE TABLE `GJ_failed_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_games`
+--
+
+CREATE TABLE `GJ_games` (
+  `game_id` int(11) NOT NULL,
+  `game_name` varchar(70) NOT NULL,
+  `game_desc` varchar(500) NOT NULL,
+  `game_year` year(4) NOT NULL,
+  `game_cover` varchar(300) NOT NULL,
+  `owned_by` int(11) NOT NULL DEFAULT 0,
+  `rating` float DEFAULT NULL,
+  `support_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Déchargement des données de la table `GJ_games`
 --
 
@@ -108,7 +268,7 @@ INSERT INTO `GJ_games` (`game_id`, `game_name`, `game_desc`, `game_year`, `game_
 (11, 'Sonic the Hedgehog', 'Le jeu de plateforme emblématique de Sega, avec Sonic le hérisson qui court à toute vitesse pour sauver le monde de Dr. Robotnik.', '1991', '/covers/sonicthehedgehog.png', 0, NULL, 25),
 (12, 'Super Mario World', 'Un jeu de plateforme où Mario explore des mondes fantastiques pour sauver la princesse Toadstool et ses amis.', '1990', '/covers/supermarioworld.png', 0, NULL, 26),
 (13, 'Pokémon Red and Blue', 'Jeu de rôle où le joueur capture des créatures appelées Pokémon et les entraîne pour devenir le meilleur dresseur.', '1996', '/covers/pokemonredblue.png', 0, NULL, 27),
-(14, 'Alex Kidd in Miracle World', 'Un jeu de plateforme où Alex Kidd, un héros de Sega, part sauver le royaume en affrontant des ennemis et résolvant des énigmes.', '1986', '/covers/alexkidd.png', 0, NULL, 28),
+(14, 'Alex Kidd in Miracle World', 'Un jeu de plateforme où Alex Kidd, un héros de Sega, part sauver le royaume en affrontant des ennemis et résolvant des énigmes.', '1986', '/covers/alexkidd.png', 2, NULL, 28),
 (15, 'Cyberpunk 2077', 'Jeu de rôle et d\'action en monde ouvert dans un futur dystopique où le joueur incarne un mercenaire dans la ville de Night City.', '2020', '/covers/cyberpunk2077.png', 1, 7, 15),
 (16, 'Hitman 3', 'Jeu d\'action et de furtivité où le joueur incarne un tueur à gages dans diverses missions autour du monde.', '2021', '/covers/hitman3.png', 0, NULL, 16),
 (17, 'Mario Kart 8 Deluxe', 'Jeu de course amusant avec Mario et ses amis où vous devez utiliser des objets pour dépasser vos adversaires dans des circuits colorés.', '2017', '/covers/mariokart8deluxe.png', 0, NULL, 17),
@@ -135,7 +295,7 @@ INSERT INTO `GJ_games` (`game_id`, `game_name`, `game_desc`, `game_year`, `game_
 (53, 'Persona 4 Golden', 'Version améliorée du RPG acclamé par la critique, avec des personnages et fonctionnalités supplémentaires.', '2012', '/covers/persona_4_golden.png', 0, NULL, 33),
 (54, 'Super Smash Bros. Melee', 'Jeu de combat réunissant de nombreux personnages emblématiques de Nintendo.', '2001', '/covers/super_smash_bros_melee.png', 0, NULL, 34),
 (55, 'Halo: Combat Evolved', 'Jeu de tir révolutionnaire mettant en scène le Spartan John-117, alias Master Chief.', '2001', '/covers/halo_combat_evolved.png', 0, NULL, 35),
-(56, 'New Super Mario Bros.', 'Jeu de plateforme en 2D mettant en scène Mario dans des niveaux colorés et variés.', '2006', '/covers/new_super_mario_bros.png', 0, NULL, 36),
+(56, 'New Super Mario Bros.', 'Jeu de plateforme en 2D mettant en scène Mario dans des niveaux colorés et variés.', '2006', '/covers/new_super_mario_bros.png', 1, NULL, 36),
 (57, 'California Games', 'Collection de mini-jeux inspirés par les sports californiens comme le skateboard et le surf.', '1989', '/covers/california_games.png', 0, NULL, 37),
 (58, 'The Last Ninja', 'Jeu d\'aventure et de combat où le joueur incarne un ninja vengeant la mort de son clan.', '1987', '/covers/the_last_ninja.png', 0, NULL, 38),
 (59, 'King of Fighters \'94', 'Jeu de combat de SNK avec des équipes de trois combattants de différentes franchises.', '1994', '/covers/king_of_fighters_94.png', 0, NULL, 39),
@@ -172,6 +332,17 @@ INSERT INTO `GJ_games` (`game_id`, `game_name`, `game_desc`, `game_year`, `game_
 (90, 'Shenmue', 'Jeu d\'aventure en monde ouvert avec Ryo Hazuki qui cherche à venger la mort de son père en explorant un Japon réaliste.', '1999', '/covers/shenmue.png', 0, NULL, 41),
 (91, 'Super Smash Bros. Brawl', 'Jeu de combat avec des personnages Nintendo dans des arènes 3D avec des éléments de plateforme.', '2008', '/covers/super_smash_bros_brawl.png', 0, NULL, 42),
 (92, 'Super Mario Maker 2', 'Jeu de plateforme où les joueurs peuvent créer leurs propres niveaux Mario et les partager avec la communauté.', '2019', '/covers/supermariomaker2.png', 0, NULL, 43);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_game_genres`
+--
+
+CREATE TABLE `GJ_game_genres` (
+  `game_id` int(11) NOT NULL,
+  `genre_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `GJ_game_genres`
@@ -256,6 +427,17 @@ INSERT INTO `GJ_game_genres` (`game_id`, `genre_id`) VALUES
 (90, 2),
 (90, 3);
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_genres`
+--
+
+CREATE TABLE `GJ_genres` (
+  `genre_id` int(11) NOT NULL,
+  `genre_label` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Déchargement des données de la table `GJ_genres`
 --
@@ -280,6 +462,53 @@ INSERT INTO `GJ_genres` (`genre_id`, `genre_label`) VALUES
 (17, 'Shoot\'Em\'Up'),
 (18, 'Sport');
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_jobs`
+--
+
+CREATE TABLE `GJ_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_job_batches`
+--
+
+CREATE TABLE `GJ_job_batches` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `total_jobs` int(11) NOT NULL,
+  `pending_jobs` int(11) NOT NULL,
+  `failed_jobs` int(11) NOT NULL,
+  `failed_job_ids` longtext NOT NULL,
+  `options` mediumtext DEFAULT NULL,
+  `cancelled_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `finished_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_migrations`
+--
+
+CREATE TABLE `GJ_migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 --
 -- Déchargement des données de la table `GJ_migrations`
 --
@@ -288,6 +517,29 @@ INSERT INTO `GJ_migrations` (`id`, `migration`, `batch`) VALUES
 (1, '0001_01_01_000000_create_users_table', 1),
 (2, '0001_01_01_000001_create_cache_table', 1),
 (3, '0001_01_01_000002_create_jobs_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_password_reset_tokens`
+--
+
+CREATE TABLE `GJ_password_reset_tokens` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_progressions`
+--
+
+CREATE TABLE `GJ_progressions` (
+  `progress_id` int(11) NOT NULL,
+  `progress_label` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `GJ_progressions`
@@ -299,6 +551,35 @@ INSERT INTO `GJ_progressions` (`progress_id`, `progress_label`) VALUES
 (3, 'Terminé à 100%'),
 (4, 'Pas Commencé');
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_requests`
+--
+
+CREATE TABLE `GJ_requests` (
+  `request_id` int(11) NOT NULL,
+  `request_motif` varchar(300) DEFAULT NULL,
+  `request_nom` varchar(70) NOT NULL,
+  `request_desc` varchar(500) NOT NULL,
+  `request_year` year(4) NOT NULL,
+  `request_cover` varchar(300) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `status_id` int(11) NOT NULL,
+  `valide_id` bigint(20) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_roles`
+--
+
+CREATE TABLE `GJ_roles` (
+  `role_code` char(1) NOT NULL,
+  `role_label` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Déchargement des données de la table `GJ_roles`
 --
@@ -308,12 +589,39 @@ INSERT INTO `GJ_roles` (`role_code`, `role_label`) VALUES
 ('U', 'Utilisateur'),
 ('V', 'Validateur');
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_sessions`
+--
+
+CREATE TABLE `GJ_sessions` (
+  `id` varchar(255) NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
+  `last_activity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 --
 -- Déchargement des données de la table `GJ_sessions`
 --
 
 INSERT INTO `GJ_sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('0fypJf3bs3FWCvyHBiEnkzXtJcNhLhM3yJgP4V4l', NULL, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0', 'YToyOntzOjY6Il90b2tlbiI7czo0MDoicHdxM2ZqVU1KQm9RbzlWWFh2WFFWRGRhRkp5TkVtVE5IQmVOSENyZyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1734106030);
+('27mQHeeKUp5Bv5rsll5uOMcsYvzUi3iYJuZvqZ0N', 29, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiSnFDVENDeG9MOG9vbzJKWWdyellqTnBZSUl1bkJyTFNFTWVUOE0yZyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kZXRhaWxfamV1LzU2Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mjk7fQ==', 1734367909),
+('991k0FEStKu2ob68q7U0MB78rw35xTj7RrKdwCvg', NULL, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoic3ZJR2VvZzI4VDNuU2RlNWtERDhMdlV1R01jM3hhR2ZkMDY1R1RrUCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMS9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1734456510);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_status`
+--
+
+CREATE TABLE `GJ_status` (
+  `status_id` int(11) NOT NULL,
+  `status_label` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `GJ_status`
@@ -323,6 +631,22 @@ INSERT INTO `GJ_status` (`status_id`, `status_label`) VALUES
 (1, 'Validée'),
 (2, 'Refusée'),
 (3, 'En Attente');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_supports`
+--
+
+CREATE TABLE `GJ_supports` (
+  `support_id` int(11) NOT NULL,
+  `support_name` varchar(70) NOT NULL,
+  `support_desc` varchar(300) DEFAULT NULL,
+  `support_year` year(4) NOT NULL,
+  `support_pic` varchar(200) DEFAULT NULL,
+  `support_logo` varchar(200) DEFAULT NULL,
+  `owned_by` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `GJ_supports`
@@ -360,6 +684,28 @@ INSERT INTO `GJ_supports` (`support_id`, `support_name`, `support_desc`, `suppor
 (43, 'Wii U', 'Console de Nintendo avec un écran tactile intégré dans le contrôleur, ouvrant la voie à la Switch.', '2012', NULL, NULL, 0),
 (44, 'Amiga 500', 'Ordinateur personnel avec des capacités graphiques et sonores avancées pour son époque, très populaire dans les années 80.', '1987', NULL, NULL, 0);
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_users`
+--
+
+CREATE TABLE `GJ_users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `telephone` varchar(20) DEFAULT NULL,
+  `visibilite` tinyint(1) NOT NULL DEFAULT 1,
+  `can_contribute` tinyint(1) NOT NULL DEFAULT 1,
+  `code` char(1) NOT NULL DEFAULT 'U',
+  `comment` varchar(250) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Déchargement des données de la table `GJ_users`
 --
@@ -385,8 +731,277 @@ INSERT INTO `GJ_users` (`id`, `name`, `email`, `email_verified_at`, `password`, 
 (18, 'David Garcia', 'david.garcia@example.com', NULL, '$2y$10$4VpFftZB8NzkrQ8qqoWhp6VgZdYwvTbfPzHzVZ2p1bXtwS7.VV4Ou', NULL, '0698761234', 0, 1, 'V', NULL, '2024-11-13 18:10:46', '2024-12-13 12:25:26'),
 (20, 'François Girard', 'francois.girard@example.com', NULL, '$2y$10$6vAIA5YzhU1jEjGRMiFzFxxpOx3rnHkAt9tYn9oXh1YnzGysd3uQy', NULL, '0632567890', 1, 0, 'U', NULL, '2024-11-13 18:10:46', '2024-12-13 12:25:26'),
 (21, 'Géraldine Lemoine', 'geraldine.lemoine@example.com', NULL, '$2y$10$5q8yEJ9kT5lYe2rtn9bggvKxdhtg2vT4nT1kDg31DgtV3bI6Ztv4m', NULL, '0673459876', 1, 1, 'V', NULL, '2024-11-13 18:10:46', '2024-12-13 12:25:26'),
-(22, 'dirila', 'axel.m.diril@gmail.com', NULL, '$2y$12$J7Ecm1oSmiNiiXUNbkUQHe9S0Uap.fW0mXIhRZh2w4B5GoGYquOPm', 'IKVx8OV0XtD1sZ1v8iNU3jq9LxhDPSSejlBPRuUVZPTbK04GY1hQBdinUQUk', NULL, 0, 1, 'A', NULL, '2024-11-20 18:59:51', '2024-12-13 12:25:26'),
-(28, 'admin', 'admin.gestionjeux@gmail.com', NULL, '$2y$12$bXugxmZ0QuemAE7Q3x5em.9dTX8MkunVzhjLbpHmNJcSoOqKmATwS', NULL, NULL, 1, 1, 'U', 'Mot de passe : M2p_admin', '2024-12-13 15:04:33', '2024-12-13 16:05:46');
+(22, 'dirila', 'axel.m.diril@gmail.com', NULL, '$2y$12$J7Ecm1oSmiNiiXUNbkUQHe9S0Uap.fW0mXIhRZh2w4B5GoGYquOPm', 'oeskpbei2eulhBE2qs69pYtv6RqzmNLynrRojQjtYG5mCEvFMTwwZKtXY7Vb', NULL, 1, 1, 'A', NULL, '2024-11-20 18:59:51', '2024-12-16 14:50:22'),
+(28, 'admin', 'admin.gestionjeux@gmail.com', NULL, '$2y$12$bXugxmZ0QuemAE7Q3x5em.9dTX8MkunVzhjLbpHmNJcSoOqKmATwS', NULL, NULL, 1, 1, 'U', 'Mot de passe : M2p_admin', '2024-12-13 15:04:33', '2024-12-13 16:05:46'),
+(29, 'dirila', 'axel.diril@orange.fr', NULL, '$2y$12$0724KgSfsF3YGLkOip3W2eNH7y87/WcLuTvt1oN8Tv1dP93W/oZoG', NULL, NULL, 0, 1, 'U', NULL, '2024-12-16 13:50:57', '2024-12-16 15:33:42');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `GJ_wishlists`
+--
+
+CREATE TABLE `GJ_wishlists` (
+  `game_id` int(11) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `GJ_cache`
+--
+ALTER TABLE `GJ_cache`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Index pour la table `GJ_cache_locks`
+--
+ALTER TABLE `GJ_cache_locks`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Index pour la table `GJ_collection_games`
+--
+ALTER TABLE `GJ_collection_games`
+  ADD PRIMARY KEY (`game_id`,`id`),
+  ADD KEY `GJ_collection_GJ_users_FK` (`id`),
+  ADD KEY `GJ_collection_GJ_progression_FK` (`progress_id`);
+
+--
+-- Index pour la table `GJ_collection_supports`
+--
+ALTER TABLE `GJ_collection_supports`
+  ADD PRIMARY KEY (`support_id`,`id`),
+  ADD KEY `Collection_Supports_GJ_users_FK` (`id`) USING BTREE;
+
+--
+-- Index pour la table `GJ_failed_jobs`
+--
+ALTER TABLE `GJ_failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `gj_failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Index pour la table `GJ_games`
+--
+ALTER TABLE `GJ_games`
+  ADD PRIMARY KEY (`game_id`),
+  ADD KEY `GJ_games_GJ_supports_FK` (`support_id`) USING BTREE;
+
+--
+-- Index pour la table `GJ_game_genres`
+--
+ALTER TABLE `GJ_game_genres`
+  ADD PRIMARY KEY (`game_id`,`genre_id`),
+  ADD KEY `GJ_game_genres_GJ_genres_FK` (`genre_id`) USING BTREE;
+
+--
+-- Index pour la table `GJ_genres`
+--
+ALTER TABLE `GJ_genres`
+  ADD PRIMARY KEY (`genre_id`);
+
+--
+-- Index pour la table `GJ_jobs`
+--
+ALTER TABLE `GJ_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `gj_jobs_queue_index` (`queue`);
+
+--
+-- Index pour la table `GJ_job_batches`
+--
+ALTER TABLE `GJ_job_batches`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `GJ_migrations`
+--
+ALTER TABLE `GJ_migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `GJ_password_reset_tokens`
+--
+ALTER TABLE `GJ_password_reset_tokens`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Index pour la table `GJ_progressions`
+--
+ALTER TABLE `GJ_progressions`
+  ADD PRIMARY KEY (`progress_id`);
+
+--
+-- Index pour la table `GJ_requests`
+--
+ALTER TABLE `GJ_requests`
+  ADD PRIMARY KEY (`request_id`),
+  ADD KEY `GJ_requests_GJ_users_FK` (`id`) USING BTREE,
+  ADD KEY `GJ_requests_GJ_status_FK` (`status_id`) USING BTREE,
+  ADD KEY `GJ_requests_GJ_users_valide_FK` (`valide_id`) USING BTREE;
+
+--
+-- Index pour la table `GJ_roles`
+--
+ALTER TABLE `GJ_roles`
+  ADD PRIMARY KEY (`role_code`);
+
+--
+-- Index pour la table `GJ_sessions`
+--
+ALTER TABLE `GJ_sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `gj_sessions_user_id_index` (`user_id`),
+  ADD KEY `gj_sessions_last_activity_index` (`last_activity`);
+
+--
+-- Index pour la table `GJ_status`
+--
+ALTER TABLE `GJ_status`
+  ADD PRIMARY KEY (`status_id`);
+
+--
+-- Index pour la table `GJ_supports`
+--
+ALTER TABLE `GJ_supports`
+  ADD PRIMARY KEY (`support_id`);
+
+--
+-- Index pour la table `GJ_users`
+--
+ALTER TABLE `GJ_users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `GJ_users_GJ_roles_FK` (`code`);
+
+--
+-- Index pour la table `GJ_wishlists`
+--
+ALTER TABLE `GJ_wishlists`
+  ADD KEY `GJ_wishlist_id_FK` (`id`),
+  ADD KEY `GJ_wishlist_game_id_FK` (`game_id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `GJ_failed_jobs`
+--
+ALTER TABLE `GJ_failed_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_games`
+--
+ALTER TABLE `GJ_games`
+  MODIFY `game_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_genres`
+--
+ALTER TABLE `GJ_genres`
+  MODIFY `genre_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_jobs`
+--
+ALTER TABLE `GJ_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_migrations`
+--
+ALTER TABLE `GJ_migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_progressions`
+--
+ALTER TABLE `GJ_progressions`
+  MODIFY `progress_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_requests`
+--
+ALTER TABLE `GJ_requests`
+  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_status`
+--
+ALTER TABLE `GJ_status`
+  MODIFY `status_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_supports`
+--
+ALTER TABLE `GJ_supports`
+  MODIFY `support_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+
+--
+-- AUTO_INCREMENT pour la table `GJ_users`
+--
+ALTER TABLE `GJ_users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `GJ_collection_games`
+--
+ALTER TABLE `GJ_collection_games`
+  ADD CONSTRAINT `GJ_collection_GJ_jeux_FK` FOREIGN KEY (`game_id`) REFERENCES `GJ_games` (`game_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `GJ_collection_GJ_progression_FK` FOREIGN KEY (`progress_id`) REFERENCES `GJ_progressions` (`progress_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `GJ_collection_GJ_users_FK` FOREIGN KEY (`id`) REFERENCES `GJ_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `GJ_collection_supports`
+--
+ALTER TABLE `GJ_collection_supports`
+  ADD CONSTRAINT `POSSEDE_SUPPORTS_GJ_supports_FK` FOREIGN KEY (`support_id`) REFERENCES `GJ_supports` (`support_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `POSSEDE_SUPPORTS_GJ_users_FK` FOREIGN KEY (`id`) REFERENCES `GJ_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `GJ_games`
+--
+ALTER TABLE `GJ_games`
+  ADD CONSTRAINT `GJ_jeux_GJ_supports_FK` FOREIGN KEY (`support_id`) REFERENCES `GJ_supports` (`support_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `GJ_game_genres`
+--
+ALTER TABLE `GJ_game_genres`
+  ADD CONSTRAINT `APPARTIENT_GJ_genres_FK` FOREIGN KEY (`genre_id`) REFERENCES `GJ_genres` (`genre_id`),
+  ADD CONSTRAINT `APPARTIENT_GJ_jeux_FK` FOREIGN KEY (`game_id`) REFERENCES `GJ_games` (`game_id`);
+
+--
+-- Contraintes pour la table `GJ_requests`
+--
+ALTER TABLE `GJ_requests`
+  ADD CONSTRAINT `GJ_requetes_GJ_statut_FK` FOREIGN KEY (`status_id`) REFERENCES `GJ_status` (`status_id`),
+  ADD CONSTRAINT `GJ_requetes_GJ_users_FK` FOREIGN KEY (`id`) REFERENCES `GJ_users` (`id`),
+  ADD CONSTRAINT `GJ_requetes_GJ_users_valide_FK` FOREIGN KEY (`valide_id`) REFERENCES `GJ_users` (`id`);
+
+--
+-- Contraintes pour la table `GJ_users`
+--
+ALTER TABLE `GJ_users`
+  ADD CONSTRAINT `GJ_users_GJ_roles_FK` FOREIGN KEY (`code`) REFERENCES `GJ_roles` (`role_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `GJ_wishlists`
+--
+ALTER TABLE `GJ_wishlists`
+  ADD CONSTRAINT `GJ_wishlist` FOREIGN KEY (`id`) REFERENCES `GJ_users` (`id`),
+  ADD CONSTRAINT `GJ_wishlist_game_id_FK` FOREIGN KEY (`game_id`) REFERENCES `GJ_games` (`game_id`),
+  ADD CONSTRAINT `GJ_wishlist_id_FK` FOREIGN KEY (`id`) REFERENCES `GJ_users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

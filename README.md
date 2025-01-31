@@ -1,7 +1,6 @@
 # GUIDE D'INSTALLATION DE GESTION JEUX #
 
-* Importer le script de création des tables dans votre base de données
-* Importer le script d'insertion dans votre base de données
+* Importer le script `create_insert_gj.sql` dans votre base de données
 * A la racine du projet (dossier `pj_gestion_jeux`), ouvrir le terminal
 * Ecrire `composer install` pour installer les dépendances de PHP
 * Ecrire `npm install` puis `npm run build` pour installer les paquets de Node.js
