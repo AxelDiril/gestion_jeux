@@ -22,12 +22,13 @@
             <option value="desc" {{ $strDirection === 'desc' ? 'selected' : '' }}>Décroissant</option>
         </select>
 
-        <input type="submit" value="Actualiser"/>
+        <input type="submit" value="Actualiser">
     </form>
 
     @if($arUsers->isEmpty())
         <p>Aucun utilisateur ne correspond à votre requête</p>
-    @else>
+    @else
+
         <table class="user_table">
             <thead>
                 <tr>

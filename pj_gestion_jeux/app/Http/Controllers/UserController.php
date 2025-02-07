@@ -32,8 +32,10 @@ class UserController extends Controller
         // Vérifier la visibilité du profil
         if ($objUser->visibilite == false) {
             // Accès interdit sauf pour l'utilisateur lui-même ou un administrateur
-            if ($objAuthUser == false || $objAuthUser->id != $id || $objAuthUser->code != "A") {
-                return redirect('/');
+            if ($objAuthUser == false || $objAuthUser->id != $id) {
+                if($objAuthUser->code != "A"){
+                    return redirect('/');
+                }
             }
         }
 

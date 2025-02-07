@@ -13,7 +13,7 @@
         <!-- Recherche par nom -->
         <input type="text" name="game_name" placeholder="Nom du jeu..." value="{{ $strGameName }}">
         <!-- Filtre par support -->
-        <select name="support">
+        <select name="support_id">
             <option value="all">Tous supports</option>
             @foreach($arSupports as $keySupport)
                 <option value="{{ $keySupport->support_id }}" 
