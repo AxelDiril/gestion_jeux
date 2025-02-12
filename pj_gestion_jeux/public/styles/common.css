@@ -1,15 +1,87 @@
-body{
-    padding : 0;
-    margin : 0;
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('../fonts/upheavtt.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-color: #F2F2F2;
+    padding: 0;
+    margin: 0;
+    display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
-header{
-    background: rgb(19, 145, 118); 
+main {
+    flex: 1;
+    padding: 2em;  /* Ajout de padding pour éviter que le contenu ne soit collé */
+    margin: 0 auto; /* Centrage horizontal */
+    max-width: 1200px; /* Définir une largeur max pour limiter l'étirement du contenu */
+}
+
+header {
+    background: rgb(19, 145, 118);
     padding: 1em;
 }
 
-footer{
-    background: rgb(19, 145, 118); 
+footer {
+    background: rgb(19, 145, 118);
+    color: white;
     padding: 1em;
+    text-align: center;
+}
+
+/* Amélioration du centrage dans les sections */
+section {
+    margin: 20px 0; /* Espacement vertical entre les sections */
+    padding: 1em;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+h1, h2 {
+    font-family: 'Press Start 2P';
+}
+
+button{
+    color: #2196F3;
+}
+
+select {
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+input {
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+/* Style personnalisé pour les boutons */
+.btn-custom {
+    width: 100px; /* Largeur fixe pour rendre les boutons carrés */
+    height: 50px; /* Hauteur fixe pour rendre les boutons carrés */
+    padding: 0; /* Enlève le padding interne pour que le bouton soit parfaitement carré */
+    display: flex; /* Utilisation de Flexbox */
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+    text-align: center; /* Centre le texte */
+    font-size: 16px; /* Taille du texte */
+    color: white;
+    border-radius: 5px; /* Coins arrondis */
+    transition: background-color 0.3s, transform 0.2s ease-in-out; /* Effet de transition pour l'effet hover */
+}
+
+/* Effet hover : changement de couleur de fond et agrandissement */
+.btn-custom:hover {
+    background-color: #FF8C00; /* Couleur de fond orange */
+    transform: scale(1.1); /* Agrandissement du bouton */
+}
+
+
+.btn-custom:hover {
+    background-color: #FF8C00; /* Couleur de fond orange */
+    transform: scale(1.1); /* Agrandissement du bouton */
 }

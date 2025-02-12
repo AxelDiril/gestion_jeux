@@ -61,7 +61,8 @@ class GameController extends Controller
             $arGames->where('game_genres.genre_id', $iGenreId);
         }
 
-        $arGames = $arGames->distinct()->get();
+        // Appliquer la pagination sur la requête avant d'exécuter la récupération
+        $arGames = $arGames->distinct()->paginate(50);
 
         // Récupère tous les supports, genres et les années de sortie pour les filtres
         $arSupports = Support::orderBy('support_name', 'asc')->get();

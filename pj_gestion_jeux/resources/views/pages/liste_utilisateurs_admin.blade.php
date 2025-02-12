@@ -44,8 +44,8 @@
         <p>Aucun utilisateur ne correspond à votre requête</p>
     @else
         <!-- Tableau des utilisateurs dans GJ_users -->
-        <table class="user_table">
-            <thead>
+        <table class="table table-light table-striped table-striped table-hover">
+            <thead class="table-group-divider">
                 <tr>
                     <th>Nom</th>
                     <th>Email</th>

@@ -29,14 +29,14 @@
         <p>Aucun utilisateur ne correspond à votre requête</p>
     @else
 
-        <table class="user_table">
+        <table class="table table-light table-striped table-striped table-hover">
             <thead>
                 <tr>
                     <th>Nom</th>
                     <th>Date d'inscription</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
                 <!-- Liste des utilisateurs de GJ_users ayant un profil public -->
                 @foreach($arUsers as $user)
                 <tr>

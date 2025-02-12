@@ -13,9 +13,9 @@
         <a href="/change_visibilite/{{ $objUser->id }}">Passer votre profil en : {{ $objUser->visibilite == 0 ? 'public' : 'privé' }}</a>
     @endif
 
-    <p>Nombre de jeux possédés : {{$iTotalGames}}</p>
+    <p><b>Nombre de jeux possédés</b> : {{$iTotalGames}}</p>
 
-    <p>Nombre de supports possédés : {{$iTotalSupports}}</p>
+    <p><b>Nombre de supports possédés</b> : {{$iTotalSupports}}</p>
 
     <h2>Derniers jeux de la collection</h2>
 
